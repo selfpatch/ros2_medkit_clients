@@ -17,7 +17,7 @@ jobs:
           node-version: '20'
 
       - name: Validate OpenAPI spec with Spectral
-        run: npx @stoplight/spectral-cli lint spec/openapi.yaml
+        run: npx @stoplight/spectral-cli@6.14.2 lint spec/openapi.yaml
 
   generate:
     runs-on: ubuntu-latest

@@ -37,7 +37,7 @@ GATEWAY_URL=http://192.168.1.10:8080 ./scripts/export-spec.sh
 ### Validate the spec
 
 ```bash
-npx @stoplight/spectral-cli lint spec/openapi.yaml
+npx @stoplight/spectral-cli@6.14.2 lint spec/openapi.yaml
 ```
 
 ## License
