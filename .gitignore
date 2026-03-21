@@ -1,0 +1,15 @@
+# Generated client code
+clients/typescript/generated/
+clients/python/generated/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.egg-info/
+.venv/
+dist/
+
+# OS
+.DS_Store
