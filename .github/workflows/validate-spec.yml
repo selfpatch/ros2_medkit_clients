@@ -1,0 +1,45 @@
+name: Validate OpenAPI Spec
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate OpenAPI spec with Spectral
+        run: npx @stoplight/spectral-cli lint spec/openapi.yaml
+
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pipx
+        run: pip install pipx
+
+      - name: Run generation pipeline
+        run: ./scripts/generate.sh
+
+      - name: Verify TypeScript output exists
+        run: test -f clients/typescript/generated/schema.d.ts
+
+      - name: Verify Python output exists
+        run: test -d clients/python/generated
