@@ -21,7 +21,7 @@ TS_DIR="$REPO_ROOT/clients/typescript"
 TS_GEN_DIR="$TS_DIR/generated"
 mkdir -p "$TS_GEN_DIR"
 
-npx openapi-typescript "$SPEC_FILE" -o "$TS_GEN_DIR/schema.d.ts"
+npx openapi-typescript@7.13.0 "$SPEC_FILE" -o "$TS_GEN_DIR/schema.d.ts"
 echo "TypeScript types generated: $TS_GEN_DIR/schema.d.ts"
 
 # --- Python ---
@@ -40,7 +40,7 @@ fi
 
 # Use openapi-python-client to generate async httpx + Pydantic client
 # --meta none skips pyproject.toml generation (we manage that separately)
-pipx run openapi-python-client generate \
+pipx run openapi-python-client==0.28.3 generate \
   --path "$SPEC_FILE" \
   --output-path "$PY_GEN_DIR" \
   --meta none
