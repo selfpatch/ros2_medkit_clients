@@ -30,6 +30,9 @@ echo "--- Python client ---"
 PY_DIR="$REPO_ROOT/clients/python"
 PY_GEN_DIR="$PY_DIR/generated"
 
+# Ensure parent directory exists (not tracked in git)
+mkdir -p "$PY_DIR"
+
 # Remove previous generated output (openapi-python-client refuses to overwrite)
 if [ -d "$PY_GEN_DIR" ]; then
   rm -rf "$PY_GEN_DIR"
