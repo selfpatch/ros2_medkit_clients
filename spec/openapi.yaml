@@ -1,0 +1,5709 @@
+components:
+  responses:
+    GenericError:
+      content:
+        application/json:
+          schema:
+            properties:
+              error_code:
+                type: string
+              message:
+                type: string
+              parameters:
+                type: object
+            required:
+              - error_code
+              - message
+            type: object
+      description: SOVD GenericError response
+info:
+  description: SOVD-compatible REST API for ROS 2 diagnostics and control. See https://selfpatch.github.io/ros2_medkit/
+    for documentation.
+  title: ROS 2 Medkit Gateway
+  version: 0.4.0
+  x-sovd-version: 1.0.0
+openapi: 3.1.0
+paths:
+  /:
+    get:
+      description: Returns gateway metadata, available endpoints, and capabilities.
+      operationId: get
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: API overview
+      tags:
+        - Server
+  /apps:
+    get:
+      operationId: get_apps
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List apps
+      tags:
+        - Discovery
+  /apps/{app_id}:
+    get:
+      operationId: get_apps_app_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get app details
+      tags:
+        - Discovery
+  /apps/{app_id}/bulk-data:
+    get:
+      operationId: get_apps_app_id_bulk_data
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data categories for app
+      tags:
+        - Bulk Data
+  /apps/{app_id}/bulk-data/{category_id}:
+    get:
+      operationId: get_apps_app_id_bulk_data_category_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data descriptors for app
+      tags:
+        - Bulk Data
+    post:
+      operationId: post_apps_app_id_bulk_data_category_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Upload bulk-data for app
+      tags:
+        - Bulk Data
+  /apps/{app_id}/bulk-data/{category_id}/{file_id}:
+    delete:
+      operationId: delete_apps_app_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete bulk-data file for app
+      tags:
+        - Bulk Data
+    get:
+      operationId: get_apps_app_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Download bulk-data file for app
+      tags:
+        - Bulk Data
+  /apps/{app_id}/configurations:
+    delete:
+      operationId: delete_apps_app_id_configurations
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete all configurations for app
+      tags:
+        - Configuration
+    get:
+      operationId: get_apps_app_id_configurations
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List configurations for app
+      tags:
+        - Configuration
+  /apps/{app_id}/configurations/{config_id}:
+    delete:
+      operationId: delete_apps_app_id_configurations_config_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete configuration for app
+      tags:
+        - Configuration
+    get:
+      operationId: get_apps_app_id_configurations_config_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific configuration for app
+      tags:
+        - Configuration
+    put:
+      operationId: put_apps_app_id_configurations_config_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Set configuration for app
+      tags:
+        - Configuration
+  /apps/{app_id}/cyclic-subscriptions:
+    get:
+      operationId: get_apps_app_id_cyclic_subscriptions
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List cyclic subscriptions for app
+      tags:
+        - Subscriptions
+    post:
+      operationId: post_apps_app_id_cyclic_subscriptions
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Create cyclic subscription for app
+      tags:
+        - Subscriptions
+  /apps/{app_id}/cyclic-subscriptions/{subscription_id}:
+    delete:
+      operationId: delete_apps_app_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete cyclic subscription for app
+      tags:
+        - Subscriptions
+    get:
+      operationId: get_apps_app_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get cyclic subscription for app
+      tags:
+        - Subscriptions
+    put:
+      operationId: put_apps_app_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update cyclic subscription for app
+      tags:
+        - Subscriptions
+  /apps/{app_id}/cyclic-subscriptions/{subscription_id}/events:
+    get:
+      operationId: get_apps_app_id_cyclic_subscriptions_subscription_id_events
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SSE events for cyclic subscription on app
+      tags:
+        - Subscriptions
+  /apps/{app_id}/data:
+    get:
+      operationId: get_apps_app_id_data
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data items for app
+      tags:
+        - Data
+  /apps/{app_id}/data-categories:
+    get:
+      operationId: get_apps_app_id_data_categories
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data categories for app
+      tags:
+        - Data
+  /apps/{app_id}/data-groups:
+    get:
+      operationId: get_apps_app_id_data_groups
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data groups for app
+      tags:
+        - Data
+  /apps/{app_id}/data/{data_id}:
+    get:
+      operationId: get_apps_app_id_data_data_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get data item for app
+      tags:
+        - Data
+    put:
+      operationId: put_apps_app_id_data_data_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Write data item for app
+      tags:
+        - Data
+  /apps/{app_id}/depends-on:
+    get:
+      operationId: get_apps_app_id_depends_on
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List app dependencies
+      tags:
+        - Discovery
+  /apps/{app_id}/faults:
+    delete:
+      operationId: delete_apps_app_id_faults
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear all faults for app
+      tags:
+        - Faults
+    get:
+      operationId: get_apps_app_id_faults
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List faults for app
+      tags:
+        - Faults
+  /apps/{app_id}/faults/{fault_code}:
+    delete:
+      operationId: delete_apps_app_id_faults_fault_code
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear fault for app
+      tags:
+        - Faults
+    get:
+      operationId: get_apps_app_id_faults_fault_code
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific fault for app
+      tags:
+        - Faults
+  /apps/{app_id}/is-located-on:
+    get:
+      operationId: get_apps_app_id_is_located_on
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get app host component
+      tags:
+        - Discovery
+  /apps/{app_id}/locks:
+    get:
+      operationId: get_apps_app_id_locks
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List locks on app
+      tags:
+        - Locking
+    post:
+      operationId: post_apps_app_id_locks
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Acquire lock on app
+      tags:
+        - Locking
+  /apps/{app_id}/locks/{lock_id}:
+    delete:
+      operationId: delete_apps_app_id_locks_lock_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The lock_id value
+          in: path
+          name: lock_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Release lock on app
+      tags:
+        - Locking
+    get:
+      operationId: get_apps_app_id_locks_lock_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The lock_id value
+          in: path
+          name: lock_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get lock details for app
+      tags:
+        - Locking
+    put:
+      operationId: put_apps_app_id_locks_lock_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The lock_id value
+          in: path
+          name: lock_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Extend lock on app
+      tags:
+        - Locking
+  /apps/{app_id}/logs:
+    get:
+      operationId: get_apps_app_id_logs
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Query log entries for app
+      tags:
+        - Logs
+  /apps/{app_id}/logs/configuration:
+    get:
+      operationId: get_apps_app_id_logs_configuration
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get log configuration for app
+      tags:
+        - Logs
+    put:
+      operationId: put_apps_app_id_logs_configuration
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update log configuration for app
+      tags:
+        - Logs
+  /apps/{app_id}/operations:
+    get:
+      operationId: get_apps_app_id_operations
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operations for app
+      tags:
+        - Operations
+  /apps/{app_id}/operations/{operation_id}:
+    get:
+      operationId: get_apps_app_id_operations_operation_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get operation details for app
+      tags:
+        - Operations
+  /apps/{app_id}/operations/{operation_id}/executions:
+    get:
+      operationId: get_apps_app_id_operations_operation_id_executions
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operation executions for app
+      tags:
+        - Operations
+    post:
+      operationId: post_apps_app_id_operations_operation_id_executions
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Start operation execution for app
+      tags:
+        - Operations
+  /apps/{app_id}/operations/{operation_id}/executions/{execution_id}:
+    delete:
+      operationId: delete_apps_app_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Cancel execution for app
+      tags:
+        - Operations
+    get:
+      operationId: get_apps_app_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get execution status for app
+      tags:
+        - Operations
+    put:
+      operationId: put_apps_app_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update execution for app
+      tags:
+        - Operations
+  /apps/{app_id}/scripts:
+    get:
+      operationId: get_apps_app_id_scripts
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List scripts for app
+      tags:
+        - Scripts
+    post:
+      operationId: post_apps_app_id_scripts
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Script uploaded
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Upload diagnostic script for app
+      tags:
+        - Scripts
+  /apps/{app_id}/scripts/{script_id}:
+    delete:
+      operationId: delete_apps_app_id_scripts_script_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Script deleted
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete script for app
+      tags:
+        - Scripts
+    get:
+      operationId: get_apps_app_id_scripts_script_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get script metadata for app
+      tags:
+        - Scripts
+  /apps/{app_id}/scripts/{script_id}/executions:
+    post:
+      operationId: post_apps_app_id_scripts_script_id_executions
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Execution started
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Start script execution for app
+      tags:
+        - Scripts
+  /apps/{app_id}/scripts/{script_id}/executions/{execution_id}:
+    delete:
+      operationId: delete_apps_app_id_scripts_script_id_executions_execution_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Execution removed
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Remove completed execution for app
+      tags:
+        - Scripts
+    get:
+      operationId: get_apps_app_id_scripts_script_id_executions_execution_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get execution status for app
+      tags:
+        - Scripts
+    put:
+      operationId: put_apps_app_id_scripts_script_id_executions_execution_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Terminate script execution for app
+      tags:
+        - Scripts
+  /apps/{app_id}/triggers:
+    get:
+      operationId: get_apps_app_id_triggers
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List triggers for app
+      tags:
+        - Triggers
+    post:
+      operationId: post_apps_app_id_triggers
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Create trigger for app
+      tags:
+        - Triggers
+  /apps/{app_id}/triggers/{trigger_id}:
+    delete:
+      operationId: delete_apps_app_id_triggers_trigger_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete trigger for app
+      tags:
+        - Triggers
+    get:
+      operationId: get_apps_app_id_triggers_trigger_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get trigger for app
+      tags:
+        - Triggers
+    put:
+      operationId: put_apps_app_id_triggers_trigger_id
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update trigger for app
+      tags:
+        - Triggers
+  /apps/{app_id}/triggers/{trigger_id}/events:
+    get:
+      operationId: get_apps_app_id_triggers_trigger_id_events
+      parameters:
+        - description: The app identifier
+          in: path
+          name: app_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SSE events for trigger on app
+      tags:
+        - Triggers
+  /areas:
+    get:
+      operationId: get_areas
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List areas
+      tags:
+        - Discovery
+  /areas/{area_id}:
+    get:
+      operationId: get_areas_area_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get area details
+      tags:
+        - Discovery
+  /areas/{area_id}/bulk-data:
+    get:
+      operationId: get_areas_area_id_bulk_data
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data categories for area
+      tags:
+        - Bulk Data
+  /areas/{area_id}/bulk-data/{category_id}:
+    get:
+      operationId: get_areas_area_id_bulk_data_category_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data descriptors for area
+      tags:
+        - Bulk Data
+    post:
+      operationId: post_areas_area_id_bulk_data_category_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '405':
+          description: Method not allowed
+        '500':
+          description: Internal server error
+      summary: Upload bulk-data for area (not supported)
+      tags:
+        - Bulk Data
+  /areas/{area_id}/bulk-data/{category_id}/{file_id}:
+    delete:
+      operationId: delete_areas_area_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '405':
+          description: Method not allowed
+        '500':
+          description: Internal server error
+      summary: Delete bulk-data file for area (not supported)
+      tags:
+        - Bulk Data
+    get:
+      operationId: get_areas_area_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Download bulk-data file for area
+      tags:
+        - Bulk Data
+  /areas/{area_id}/components:
+    get:
+      operationId: get_areas_area_id_components
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List components in area
+      tags:
+        - Discovery
+  /areas/{area_id}/configurations:
+    delete:
+      operationId: delete_areas_area_id_configurations
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete all configurations for area
+      tags:
+        - Configuration
+    get:
+      operationId: get_areas_area_id_configurations
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List configurations for area
+      tags:
+        - Configuration
+  /areas/{area_id}/configurations/{config_id}:
+    delete:
+      operationId: delete_areas_area_id_configurations_config_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete configuration for area
+      tags:
+        - Configuration
+    get:
+      operationId: get_areas_area_id_configurations_config_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific configuration for area
+      tags:
+        - Configuration
+    put:
+      operationId: put_areas_area_id_configurations_config_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Set configuration for area
+      tags:
+        - Configuration
+  /areas/{area_id}/contains:
+    get:
+      operationId: get_areas_area_id_contains
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List entities contained in area
+      tags:
+        - Discovery
+  /areas/{area_id}/data:
+    get:
+      operationId: get_areas_area_id_data
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data items for area
+      tags:
+        - Data
+  /areas/{area_id}/data-categories:
+    get:
+      operationId: get_areas_area_id_data_categories
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data categories for area
+      tags:
+        - Data
+  /areas/{area_id}/data-groups:
+    get:
+      operationId: get_areas_area_id_data_groups
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data groups for area
+      tags:
+        - Data
+  /areas/{area_id}/data/{data_id}:
+    get:
+      operationId: get_areas_area_id_data_data_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get data item for area
+      tags:
+        - Data
+    put:
+      operationId: put_areas_area_id_data_data_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Write data item for area
+      tags:
+        - Data
+  /areas/{area_id}/faults:
+    delete:
+      operationId: delete_areas_area_id_faults
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear all faults for area
+      tags:
+        - Faults
+    get:
+      operationId: get_areas_area_id_faults
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List faults for area
+      tags:
+        - Faults
+  /areas/{area_id}/faults/{fault_code}:
+    delete:
+      operationId: delete_areas_area_id_faults_fault_code
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear fault for area
+      tags:
+        - Faults
+    get:
+      operationId: get_areas_area_id_faults_fault_code
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific fault for area
+      tags:
+        - Faults
+  /areas/{area_id}/logs:
+    get:
+      operationId: get_areas_area_id_logs
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Query log entries for area
+      tags:
+        - Logs
+  /areas/{area_id}/logs/configuration:
+    get:
+      operationId: get_areas_area_id_logs_configuration
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get log configuration for area
+      tags:
+        - Logs
+    put:
+      operationId: put_areas_area_id_logs_configuration
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update log configuration for area
+      tags:
+        - Logs
+  /areas/{area_id}/operations:
+    get:
+      operationId: get_areas_area_id_operations
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operations for area
+      tags:
+        - Operations
+  /areas/{area_id}/operations/{operation_id}:
+    get:
+      operationId: get_areas_area_id_operations_operation_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get operation details for area
+      tags:
+        - Operations
+  /areas/{area_id}/operations/{operation_id}/executions:
+    get:
+      operationId: get_areas_area_id_operations_operation_id_executions
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operation executions for area
+      tags:
+        - Operations
+    post:
+      operationId: post_areas_area_id_operations_operation_id_executions
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Start operation execution for area
+      tags:
+        - Operations
+  /areas/{area_id}/operations/{operation_id}/executions/{execution_id}:
+    delete:
+      operationId: delete_areas_area_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Cancel execution for area
+      tags:
+        - Operations
+    get:
+      operationId: get_areas_area_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get execution status for area
+      tags:
+        - Operations
+    put:
+      operationId: put_areas_area_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update execution for area
+      tags:
+        - Operations
+  /areas/{area_id}/subareas:
+    get:
+      operationId: get_areas_area_id_subareas
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List subareas
+      tags:
+        - Discovery
+  /areas/{area_id}/subareas/{subarea_id}/bulk-data:
+    get:
+      operationId: get_areas_area_id_subareas_subarea_id_bulk_data
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The subarea identifier
+          in: path
+          name: subarea_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data categories for subarea
+      tags:
+        - Bulk Data
+  /areas/{area_id}/subareas/{subarea_id}/bulk-data/{category_id}:
+    get:
+      operationId: get_areas_area_id_subareas_subarea_id_bulk_data_category_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The subarea identifier
+          in: path
+          name: subarea_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data descriptors for subarea
+      tags:
+        - Bulk Data
+  /areas/{area_id}/subareas/{subarea_id}/bulk-data/{category_id}/{file_id}:
+    get:
+      operationId: get_areas_area_id_subareas_subarea_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The subarea identifier
+          in: path
+          name: subarea_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Download bulk-data file for subarea
+      tags:
+        - Bulk Data
+  /areas/{area_id}/triggers:
+    get:
+      operationId: get_areas_area_id_triggers
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List triggers for area
+      tags:
+        - Triggers
+    post:
+      operationId: post_areas_area_id_triggers
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Create trigger for area
+      tags:
+        - Triggers
+  /areas/{area_id}/triggers/{trigger_id}:
+    delete:
+      operationId: delete_areas_area_id_triggers_trigger_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete trigger for area
+      tags:
+        - Triggers
+    get:
+      operationId: get_areas_area_id_triggers_trigger_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get trigger for area
+      tags:
+        - Triggers
+    put:
+      operationId: put_areas_area_id_triggers_trigger_id
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update trigger for area
+      tags:
+        - Triggers
+  /areas/{area_id}/triggers/{trigger_id}/events:
+    get:
+      operationId: get_areas_area_id_triggers_trigger_id_events
+      parameters:
+        - description: The area identifier
+          in: path
+          name: area_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SSE events for trigger on area
+      tags:
+        - Triggers
+  /auth/authorize:
+    post:
+      description: Authenticate and obtain authorization tokens.
+      operationId: post_auth_authorize
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Authorize client
+      tags:
+        - Authentication
+  /auth/revoke:
+    post:
+      description: Revoke an access or refresh token.
+      operationId: post_auth_revoke
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Revoke token
+      tags:
+        - Authentication
+  /auth/token:
+    post:
+      description: Exchange credentials or refresh token for a JWT access token.
+      operationId: post_auth_token
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Obtain access token
+      tags:
+        - Authentication
+  /components:
+    get:
+      operationId: get_components
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List components
+      tags:
+        - Discovery
+  /components/{component_id}:
+    get:
+      operationId: get_components_component_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get component details
+      tags:
+        - Discovery
+  /components/{component_id}/bulk-data:
+    get:
+      operationId: get_components_component_id_bulk_data
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data categories for component
+      tags:
+        - Bulk Data
+  /components/{component_id}/bulk-data/{category_id}:
+    get:
+      operationId: get_components_component_id_bulk_data_category_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data descriptors for component
+      tags:
+        - Bulk Data
+    post:
+      operationId: post_components_component_id_bulk_data_category_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Upload bulk-data for component
+      tags:
+        - Bulk Data
+  /components/{component_id}/bulk-data/{category_id}/{file_id}:
+    delete:
+      operationId: delete_components_component_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete bulk-data file for component
+      tags:
+        - Bulk Data
+    get:
+      operationId: get_components_component_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Download bulk-data file for component
+      tags:
+        - Bulk Data
+  /components/{component_id}/configurations:
+    delete:
+      operationId: delete_components_component_id_configurations
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete all configurations for component
+      tags:
+        - Configuration
+    get:
+      operationId: get_components_component_id_configurations
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List configurations for component
+      tags:
+        - Configuration
+  /components/{component_id}/configurations/{config_id}:
+    delete:
+      operationId: delete_components_component_id_configurations_config_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete configuration for component
+      tags:
+        - Configuration
+    get:
+      operationId: get_components_component_id_configurations_config_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific configuration for component
+      tags:
+        - Configuration
+    put:
+      operationId: put_components_component_id_configurations_config_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Set configuration for component
+      tags:
+        - Configuration
+  /components/{component_id}/cyclic-subscriptions:
+    get:
+      operationId: get_components_component_id_cyclic_subscriptions
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List cyclic subscriptions for component
+      tags:
+        - Subscriptions
+    post:
+      operationId: post_components_component_id_cyclic_subscriptions
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Create cyclic subscription for component
+      tags:
+        - Subscriptions
+  /components/{component_id}/cyclic-subscriptions/{subscription_id}:
+    delete:
+      operationId: delete_components_component_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete cyclic subscription for component
+      tags:
+        - Subscriptions
+    get:
+      operationId: get_components_component_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get cyclic subscription for component
+      tags:
+        - Subscriptions
+    put:
+      operationId: put_components_component_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update cyclic subscription for component
+      tags:
+        - Subscriptions
+  /components/{component_id}/cyclic-subscriptions/{subscription_id}/events:
+    get:
+      operationId: get_components_component_id_cyclic_subscriptions_subscription_id_events
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SSE events for cyclic subscription on component
+      tags:
+        - Subscriptions
+  /components/{component_id}/data:
+    get:
+      operationId: get_components_component_id_data
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data items for component
+      tags:
+        - Data
+  /components/{component_id}/data-categories:
+    get:
+      operationId: get_components_component_id_data_categories
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data categories for component
+      tags:
+        - Data
+  /components/{component_id}/data-groups:
+    get:
+      operationId: get_components_component_id_data_groups
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data groups for component
+      tags:
+        - Data
+  /components/{component_id}/data/{data_id}:
+    get:
+      operationId: get_components_component_id_data_data_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get data item for component
+      tags:
+        - Data
+    put:
+      operationId: put_components_component_id_data_data_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Write data item for component
+      tags:
+        - Data
+  /components/{component_id}/depends-on:
+    get:
+      operationId: get_components_component_id_depends_on
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List component dependencies
+      tags:
+        - Discovery
+  /components/{component_id}/faults:
+    delete:
+      operationId: delete_components_component_id_faults
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear all faults for component
+      tags:
+        - Faults
+    get:
+      operationId: get_components_component_id_faults
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List faults for component
+      tags:
+        - Faults
+  /components/{component_id}/faults/{fault_code}:
+    delete:
+      operationId: delete_components_component_id_faults_fault_code
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear fault for component
+      tags:
+        - Faults
+    get:
+      operationId: get_components_component_id_faults_fault_code
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific fault for component
+      tags:
+        - Faults
+  /components/{component_id}/hosts:
+    get:
+      operationId: get_components_component_id_hosts
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List component hosts
+      tags:
+        - Discovery
+  /components/{component_id}/locks:
+    get:
+      operationId: get_components_component_id_locks
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List locks on component
+      tags:
+        - Locking
+    post:
+      operationId: post_components_component_id_locks
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Acquire lock on component
+      tags:
+        - Locking
+  /components/{component_id}/locks/{lock_id}:
+    delete:
+      operationId: delete_components_component_id_locks_lock_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The lock_id value
+          in: path
+          name: lock_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Release lock on component
+      tags:
+        - Locking
+    get:
+      operationId: get_components_component_id_locks_lock_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The lock_id value
+          in: path
+          name: lock_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get lock details for component
+      tags:
+        - Locking
+    put:
+      operationId: put_components_component_id_locks_lock_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The lock_id value
+          in: path
+          name: lock_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Extend lock on component
+      tags:
+        - Locking
+  /components/{component_id}/logs:
+    get:
+      operationId: get_components_component_id_logs
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Query log entries for component
+      tags:
+        - Logs
+  /components/{component_id}/logs/configuration:
+    get:
+      operationId: get_components_component_id_logs_configuration
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get log configuration for component
+      tags:
+        - Logs
+    put:
+      operationId: put_components_component_id_logs_configuration
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update log configuration for component
+      tags:
+        - Logs
+  /components/{component_id}/operations:
+    get:
+      operationId: get_components_component_id_operations
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operations for component
+      tags:
+        - Operations
+  /components/{component_id}/operations/{operation_id}:
+    get:
+      operationId: get_components_component_id_operations_operation_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get operation details for component
+      tags:
+        - Operations
+  /components/{component_id}/operations/{operation_id}/executions:
+    get:
+      operationId: get_components_component_id_operations_operation_id_executions
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operation executions for component
+      tags:
+        - Operations
+    post:
+      operationId: post_components_component_id_operations_operation_id_executions
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Start operation execution for component
+      tags:
+        - Operations
+  /components/{component_id}/operations/{operation_id}/executions/{execution_id}:
+    delete:
+      operationId: delete_components_component_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Cancel execution for component
+      tags:
+        - Operations
+    get:
+      operationId: get_components_component_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get execution status for component
+      tags:
+        - Operations
+    put:
+      operationId: put_components_component_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update execution for component
+      tags:
+        - Operations
+  /components/{component_id}/scripts:
+    get:
+      operationId: get_components_component_id_scripts
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List scripts for component
+      tags:
+        - Scripts
+    post:
+      operationId: post_components_component_id_scripts
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Script uploaded
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Upload diagnostic script for component
+      tags:
+        - Scripts
+  /components/{component_id}/scripts/{script_id}:
+    delete:
+      operationId: delete_components_component_id_scripts_script_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Script deleted
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete script for component
+      tags:
+        - Scripts
+    get:
+      operationId: get_components_component_id_scripts_script_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get script metadata for component
+      tags:
+        - Scripts
+  /components/{component_id}/scripts/{script_id}/executions:
+    post:
+      operationId: post_components_component_id_scripts_script_id_executions
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Execution started
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Start script execution for component
+      tags:
+        - Scripts
+  /components/{component_id}/scripts/{script_id}/executions/{execution_id}:
+    delete:
+      operationId: delete_components_component_id_scripts_script_id_executions_execution_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Execution removed
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Remove completed execution for component
+      tags:
+        - Scripts
+    get:
+      operationId: get_components_component_id_scripts_script_id_executions_execution_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get execution status for component
+      tags:
+        - Scripts
+    put:
+      operationId: put_components_component_id_scripts_script_id_executions_execution_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The script_id value
+          in: path
+          name: script_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Terminate script execution for component
+      tags:
+        - Scripts
+  /components/{component_id}/subcomponents:
+    get:
+      operationId: get_components_component_id_subcomponents
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List subcomponents
+      tags:
+        - Discovery
+  /components/{component_id}/subcomponents/{subcomponent_id}/bulk-data:
+    get:
+      operationId: get_components_component_id_subcomponents_subcomponent_id_bulk_data
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The subcomponent identifier
+          in: path
+          name: subcomponent_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data categories for subcomponent
+      tags:
+        - Bulk Data
+  /components/{component_id}/subcomponents/{subcomponent_id}/bulk-data/{category_id}:
+    get:
+      operationId: get_components_component_id_subcomponents_subcomponent_id_bulk_data_category_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The subcomponent identifier
+          in: path
+          name: subcomponent_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data descriptors for subcomponent
+      tags:
+        - Bulk Data
+  /components/{component_id}/subcomponents/{subcomponent_id}/bulk-data/{category_id}/{file_id}:
+    get:
+      operationId: get_components_component_id_subcomponents_subcomponent_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The subcomponent identifier
+          in: path
+          name: subcomponent_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Download bulk-data file for subcomponent
+      tags:
+        - Bulk Data
+  /components/{component_id}/triggers:
+    get:
+      operationId: get_components_component_id_triggers
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List triggers for component
+      tags:
+        - Triggers
+    post:
+      operationId: post_components_component_id_triggers
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Create trigger for component
+      tags:
+        - Triggers
+  /components/{component_id}/triggers/{trigger_id}:
+    delete:
+      operationId: delete_components_component_id_triggers_trigger_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete trigger for component
+      tags:
+        - Triggers
+    get:
+      operationId: get_components_component_id_triggers_trigger_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get trigger for component
+      tags:
+        - Triggers
+    put:
+      operationId: put_components_component_id_triggers_trigger_id
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update trigger for component
+      tags:
+        - Triggers
+  /components/{component_id}/triggers/{trigger_id}/events:
+    get:
+      operationId: get_components_component_id_triggers_trigger_id_events
+      parameters:
+        - description: The component identifier
+          in: path
+          name: component_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SSE events for trigger on component
+      tags:
+        - Triggers
+  /faults:
+    delete:
+      operationId: delete_faults
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear all faults globally
+      tags:
+        - Faults
+    get:
+      description: Retrieve all faults across the system.
+      operationId: get_faults
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List all faults globally
+      tags:
+        - Faults
+  /faults/stream:
+    get:
+      description: Server-Sent Events stream for real-time fault notifications.
+      operationId: get_faults_stream
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Stream fault events (SSE)
+      tags:
+        - Faults
+  /functions:
+    get:
+      operationId: get_functions
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List functions
+      tags:
+        - Discovery
+  /functions/{function_id}:
+    get:
+      operationId: get_functions_function_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get function details
+      tags:
+        - Discovery
+  /functions/{function_id}/bulk-data:
+    get:
+      operationId: get_functions_function_id_bulk_data
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data categories for function
+      tags:
+        - Bulk Data
+  /functions/{function_id}/bulk-data/{category_id}:
+    get:
+      operationId: get_functions_function_id_bulk_data_category_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List bulk-data descriptors for function
+      tags:
+        - Bulk Data
+    post:
+      operationId: post_functions_function_id_bulk_data_category_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '405':
+          description: Method not allowed
+        '500':
+          description: Internal server error
+      summary: Upload bulk-data for function (not supported)
+      tags:
+        - Bulk Data
+  /functions/{function_id}/bulk-data/{category_id}/{file_id}:
+    delete:
+      operationId: delete_functions_function_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '405':
+          description: Method not allowed
+        '500':
+          description: Internal server error
+      summary: Delete bulk-data file for function (not supported)
+      tags:
+        - Bulk Data
+    get:
+      operationId: get_functions_function_id_bulk_data_category_id_file_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data category identifier
+          in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+        - description: The bulk data file identifier
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Download bulk-data file for function
+      tags:
+        - Bulk Data
+  /functions/{function_id}/configurations:
+    delete:
+      operationId: delete_functions_function_id_configurations
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete all configurations for function
+      tags:
+        - Configuration
+    get:
+      operationId: get_functions_function_id_configurations
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List configurations for function
+      tags:
+        - Configuration
+  /functions/{function_id}/configurations/{config_id}:
+    delete:
+      operationId: delete_functions_function_id_configurations_config_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete configuration for function
+      tags:
+        - Configuration
+    get:
+      operationId: get_functions_function_id_configurations_config_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific configuration for function
+      tags:
+        - Configuration
+    put:
+      operationId: put_functions_function_id_configurations_config_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The configuration parameter identifier (ROS 2 parameter name)
+          in: path
+          name: config_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Set configuration for function
+      tags:
+        - Configuration
+  /functions/{function_id}/cyclic-subscriptions:
+    get:
+      operationId: get_functions_function_id_cyclic_subscriptions
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List cyclic subscriptions for function
+      tags:
+        - Subscriptions
+    post:
+      operationId: post_functions_function_id_cyclic_subscriptions
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Create cyclic subscription for function
+      tags:
+        - Subscriptions
+  /functions/{function_id}/cyclic-subscriptions/{subscription_id}:
+    delete:
+      operationId: delete_functions_function_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete cyclic subscription for function
+      tags:
+        - Subscriptions
+    get:
+      operationId: get_functions_function_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get cyclic subscription for function
+      tags:
+        - Subscriptions
+    put:
+      operationId: put_functions_function_id_cyclic_subscriptions_subscription_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update cyclic subscription for function
+      tags:
+        - Subscriptions
+  /functions/{function_id}/cyclic-subscriptions/{subscription_id}/events:
+    get:
+      operationId: get_functions_function_id_cyclic_subscriptions_subscription_id_events
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The cyclic subscription identifier
+          in: path
+          name: subscription_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SSE events for cyclic subscription on function
+      tags:
+        - Subscriptions
+  /functions/{function_id}/data:
+    get:
+      operationId: get_functions_function_id_data
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data items for function
+      tags:
+        - Data
+  /functions/{function_id}/data-categories:
+    get:
+      operationId: get_functions_function_id_data_categories
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data categories for function
+      tags:
+        - Data
+  /functions/{function_id}/data-groups:
+    get:
+      operationId: get_functions_function_id_data_groups
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List data groups for function
+      tags:
+        - Data
+  /functions/{function_id}/data/{data_id}:
+    get:
+      operationId: get_functions_function_id_data_data_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get data item for function
+      tags:
+        - Data
+    put:
+      operationId: put_functions_function_id_data_data_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The data item identifier (ROS 2 topic name)
+          in: path
+          name: data_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Write data item for function
+      tags:
+        - Data
+  /functions/{function_id}/faults:
+    delete:
+      operationId: delete_functions_function_id_faults
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear all faults for function
+      tags:
+        - Faults
+    get:
+      operationId: get_functions_function_id_faults
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List faults for function
+      tags:
+        - Faults
+  /functions/{function_id}/faults/{fault_code}:
+    delete:
+      operationId: delete_functions_function_id_faults_fault_code
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Clear fault for function
+      tags:
+        - Faults
+    get:
+      operationId: get_functions_function_id_faults_fault_code
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The fault code identifier
+          in: path
+          name: fault_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get specific fault for function
+      tags:
+        - Faults
+  /functions/{function_id}/hosts:
+    get:
+      operationId: get_functions_function_id_hosts
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List function hosts
+      tags:
+        - Discovery
+  /functions/{function_id}/logs:
+    get:
+      operationId: get_functions_function_id_logs
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Query log entries for function
+      tags:
+        - Logs
+  /functions/{function_id}/logs/configuration:
+    get:
+      operationId: get_functions_function_id_logs_configuration
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get log configuration for function
+      tags:
+        - Logs
+    put:
+      operationId: put_functions_function_id_logs_configuration
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update log configuration for function
+      tags:
+        - Logs
+  /functions/{function_id}/operations:
+    get:
+      operationId: get_functions_function_id_operations
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operations for function
+      tags:
+        - Operations
+  /functions/{function_id}/operations/{operation_id}:
+    get:
+      operationId: get_functions_function_id_operations_operation_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get operation details for function
+      tags:
+        - Operations
+  /functions/{function_id}/operations/{operation_id}/executions:
+    get:
+      operationId: get_functions_function_id_operations_operation_id_executions
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List operation executions for function
+      tags:
+        - Operations
+    post:
+      operationId: post_functions_function_id_operations_operation_id_executions
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Start operation execution for function
+      tags:
+        - Operations
+  /functions/{function_id}/operations/{operation_id}/executions/{execution_id}:
+    delete:
+      operationId: delete_functions_function_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Cancel execution for function
+      tags:
+        - Operations
+    get:
+      operationId: get_functions_function_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get execution status for function
+      tags:
+        - Operations
+    put:
+      operationId: put_functions_function_id_operations_operation_id_executions_execution_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The operation identifier
+          in: path
+          name: operation_id
+          required: true
+          schema:
+            type: string
+        - description: The execution identifier
+          in: path
+          name: execution_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update execution for function
+      tags:
+        - Operations
+  /functions/{function_id}/triggers:
+    get:
+      operationId: get_functions_function_id_triggers
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List triggers for function
+      tags:
+        - Triggers
+    post:
+      operationId: post_functions_function_id_triggers
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Create trigger for function
+      tags:
+        - Triggers
+  /functions/{function_id}/triggers/{trigger_id}:
+    delete:
+      operationId: delete_functions_function_id_triggers_trigger_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete trigger for function
+      tags:
+        - Triggers
+    get:
+      operationId: get_functions_function_id_triggers_trigger_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get trigger for function
+      tags:
+        - Triggers
+    put:
+      operationId: put_functions_function_id_triggers_trigger_id
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Update trigger for function
+      tags:
+        - Triggers
+  /functions/{function_id}/triggers/{trigger_id}/events:
+    get:
+      operationId: get_functions_function_id_triggers_trigger_id_events
+      parameters:
+        - description: The function identifier
+          in: path
+          name: function_id
+          required: true
+          schema:
+            type: string
+        - description: The trigger_id value
+          in: path
+          name: trigger_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SSE events for trigger on function
+      tags:
+        - Triggers
+  /health:
+    get:
+      description: Returns gateway health status.
+      operationId: get_health
+      responses:
+        '200':
+          description: Gateway is healthy
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Health check
+      tags:
+        - Server
+  /updates:
+    get:
+      operationId: get_updates
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: List software updates
+      tags:
+        - Updates
+    post:
+      operationId: post_updates
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Register a software update
+      tags:
+        - Updates
+  /updates/{update_id}:
+    delete:
+      operationId: delete_updates_update_id
+      parameters:
+        - description: The software update identifier
+          in: path
+          name: update_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Delete update
+      tags:
+        - Updates
+    get:
+      operationId: get_updates_update_id
+      parameters:
+        - description: The software update identifier
+          in: path
+          name: update_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get update details
+      tags:
+        - Updates
+  /updates/{update_id}/automated:
+    put:
+      operationId: put_updates_update_id_automated
+      parameters:
+        - description: The software update identifier
+          in: path
+          name: update_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Run automated update
+      tags:
+        - Updates
+  /updates/{update_id}/execute:
+    put:
+      operationId: put_updates_update_id_execute
+      parameters:
+        - description: The software update identifier
+          in: path
+          name: update_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Execute update
+      tags:
+        - Updates
+  /updates/{update_id}/prepare:
+    put:
+      operationId: put_updates_update_id_prepare
+      parameters:
+        - description: The software update identifier
+          in: path
+          name: update_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Prepare update for execution
+      tags:
+        - Updates
+  /updates/{update_id}/status:
+    get:
+      operationId: get_updates_update_id_status
+      parameters:
+        - description: The software update identifier
+          in: path
+          name: update_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: Get update status
+      tags:
+        - Updates
+  /version-info:
+    get:
+      description: Returns SOVD specification version and vendor info.
+      operationId: get_version_info
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      summary: SOVD version information
+      tags:
+        - Server
+servers:
+  - description: Gateway server
+    url: http://127.0.0.1:8080/api/v1
+tags:
+  - description: Gateway health, metadata, and version info
+    name: Server
+  - description: Entity discovery and hierarchy navigation
+    name: Discovery
+  - description: Read and write ROS 2 topic data
+    name: Data
+  - description: Execute ROS 2 service and action operations
+    name: Operations
+  - description: Read and write ROS 2 node parameters
+    name: Configuration
+  - description: Fault management and diagnostics
+    name: Faults
+  - description: Application log access and configuration
+    name: Logs
+  - description: Large file downloads (rosbags, snapshots)
+    name: Bulk Data
+  - description: Cyclic data subscriptions and event streaming
+    name: Subscriptions
+  - description: Software update management
+    name: Updates
+  - description: JWT-based authentication
+    name: Authentication
