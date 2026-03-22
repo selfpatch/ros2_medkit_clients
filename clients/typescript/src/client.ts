@@ -61,6 +61,9 @@ export function getTimeoutForPath(path: string, config: TimeoutConfig): number {
   return config.default ?? DEFAULT_TIMEOUTS.default;
 }
 
+/** WeakMap to associate timeout timers with requests without mutating them. */
+const timeoutTimers = new WeakMap<Request, ReturnType<typeof setTimeout>>();
+
 /** Create timeout middleware that aborts requests after the tier-appropriate duration. */
 export function createTimeoutMiddleware(config: TimeoutConfig): Middleware {
   return {
@@ -69,23 +72,28 @@ export function createTimeoutMiddleware(config: TimeoutConfig): Middleware {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeout);
 
-      // Chain abort signals if one already exists
       if (request.signal) {
-        request.signal.addEventListener('abort', () => {
+        if (request.signal.aborted) {
           clearTimeout(timer);
-          controller.abort();
-        });
+          controller.abort(request.signal.reason);
+        } else {
+          request.signal.addEventListener('abort', () => {
+            clearTimeout(timer);
+            controller.abort(request.signal!.reason);
+          }, { once: true });
+        }
       }
 
       const newRequest = new Request(request, { signal: controller.signal });
-
-      // Store cleanup in a way the response handler can access
-      (newRequest as unknown as Record<string, unknown>).__timeoutTimer = timer;
+      timeoutTimers.set(newRequest, timer);
       return newRequest;
     },
     async onResponse({ request }) {
-      const timer = (request as unknown as Record<string, unknown>).__timeoutTimer as ReturnType<typeof setTimeout> | undefined;
-      if (timer) clearTimeout(timer);
+      const timer = timeoutTimers.get(request);
+      if (timer) {
+        clearTimeout(timer);
+        timeoutTimers.delete(request);
+      }
       return undefined;
     },
   };

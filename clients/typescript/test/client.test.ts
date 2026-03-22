@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, afterEach } from 'vitest';
-import { createMedkitClient, normalizeBaseUrl, getTimeoutForPath } from '../src/client.js';
+import { createMedkitClient, normalizeBaseUrl, getTimeoutForPath, createTimeoutMiddleware } from '../src/client.js';
 
 describe('normalizeBaseUrl', () => {
   test('adds http:// when no protocol', () => {
@@ -49,6 +49,75 @@ describe('getTimeoutForPath', () => {
 
   test('uses defaults when config is empty', () => {
     expect(getTimeoutForPath('/api/v1/apps', {})).toBe(10_000);
+  });
+});
+
+describe('createTimeoutMiddleware', () => {
+  test('aborts request after timeout', async () => {
+    const middleware = createTimeoutMiddleware({ default: 50 });
+
+    const request = new Request('http://localhost/api/v1/apps');
+    const result = await middleware.onRequest!({
+      request,
+      schemaPath: '/apps',
+      params: {},
+      id: 'test',
+      options: {} as never,
+    });
+
+    // The returned request should have an abort signal
+    expect(result).toBeInstanceOf(Request);
+    const newRequest = result as Request;
+    expect(newRequest.signal).toBeDefined();
+    expect(newRequest.signal.aborted).toBe(false);
+
+    // Wait for timeout to fire
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(newRequest.signal.aborted).toBe(true);
+  });
+
+  test('clears timer on response', async () => {
+    const middleware = createTimeoutMiddleware({ default: 5000 });
+
+    const request = new Request('http://localhost/api/v1/apps');
+    const newRequest = (await middleware.onRequest!({
+      request,
+      schemaPath: '/apps',
+      params: {},
+      id: 'test',
+      options: {} as never,
+    })) as Request;
+
+    // Simulate response arriving quickly
+    await middleware.onResponse!({
+      request: newRequest,
+      response: new Response('ok'),
+      schemaPath: '/apps',
+      params: {},
+      id: 'test',
+      options: {} as never,
+    });
+
+    // After timer would have fired, signal should NOT be aborted
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(newRequest.signal.aborted).toBe(false);
+  });
+
+  test('uses operations timeout for execution paths', async () => {
+    const middleware = createTimeoutMiddleware({ default: 50, operations: 5000 });
+
+    const request = new Request('http://localhost/api/v1/apps/node1/operations/restart/executions');
+    const newRequest = (await middleware.onRequest!({
+      request,
+      schemaPath: '/apps/{app_id}/operations/{operation_id}/executions',
+      params: {},
+      id: 'test',
+      options: {} as never,
+    })) as Request;
+
+    // Default timeout (50ms) should NOT abort - operations timeout is 5000ms
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(newRequest.signal.aborted).toBe(false);
   });
 });
 
