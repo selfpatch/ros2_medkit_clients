@@ -28,12 +28,8 @@ def parse_sse_line(line: str, state: dict) -> None:
     """Parse a single SSE line into the accumulator state dict.
 
     The state dict has keys: event, data, id, retry.
-    Trailing ``\\r`` is stripped for CRLF compatibility.
+    Caller is responsible for stripping trailing ``\\r`` (CRLF handling).
     """
-    # Strip trailing \r for CRLF compat
-    if line.endswith("\r"):
-        line = line[:-1]
-
     # Comment line
     if line.startswith(":"):
         return

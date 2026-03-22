@@ -104,10 +104,11 @@ class TestParseSseLine:
         parse_sse_line("foo: bar", state)
         assert state == self._state()
 
-    def test_crlf_stripping(self):
-        """Trailing \\r is stripped (CRLF compatibility)."""
+    def test_crlf_passed_through(self):
+        """parse_sse_line expects caller to strip \\r. CRLF handled in _connect_and_stream."""
         state = self._state()
-        parse_sse_line("data: value\r", state)
+        # Caller (SseStream._connect_and_stream) strips \r before calling parse_sse_line
+        parse_sse_line("data: value", state)  # Already stripped
         assert state["data"] == "value"
 
     def test_data_without_space_after_colon(self):
