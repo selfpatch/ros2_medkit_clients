@@ -5,11 +5,13 @@
 
 from __future__ import annotations
 
+import asyncio
+
 import httpx
 import pytest
 import respx
 
-from ros2_medkit_client.errors import MedkitError
+from ros2_medkit_client.errors import MedkitConnectionError, MedkitError, MedkitTimeoutError
 from ros2_medkit_client.sse import SseEvent, SseStream, parse_sse_line
 
 # ---------------------------------------------------------------------------
@@ -256,15 +258,18 @@ class TestSseStream:
 
     @respx.mock
     async def test_max_retries_exhaustion(self):
-        """After max_retries, the underlying exception propagates."""
+        """After max_retries, MedkitConnectionError is raised wrapping the original."""
         route = respx.get("http://gw/sse")
         # All attempts fail with network error
         route.side_effect = httpx.ConnectError("refused")
 
         stream = SseStream("http://gw/sse", max_retries=2, initial_delay=0.01, max_delay=0.01)
-        with pytest.raises(httpx.ConnectError):
+        with pytest.raises(MedkitConnectionError) as exc_info:
             async for _ in stream:
                 pass
+
+        assert exc_info.value.code == "connection-error"
+        assert isinstance(exc_info.value.__cause__, httpx.ConnectError)
 
     @respx.mock
     async def test_buffer_overflow(self):
@@ -461,3 +466,47 @@ class TestSseStream:
 
         assert exc_info.value.status == 500
         assert exc_info.value.code == "internal-error"
+
+    @respx.mock
+    async def test_timeout_wrapped_in_medkit_timeout_error(self):
+        """Timeout exceptions are wrapped into MedkitTimeoutError."""
+        respx.get("http://gw/sse").mock(side_effect=httpx.ReadTimeout("read timed out"))
+
+        stream = SseStream("http://gw/sse", max_retries=0, initial_delay=0.01)
+        with pytest.raises(MedkitTimeoutError) as exc_info:
+            async for _ in stream:
+                pass
+
+        assert exc_info.value.code == "timeout"
+        assert isinstance(exc_info.value.__cause__, httpx.ReadTimeout)
+
+    @respx.mock
+    async def test_close_during_reconnect_sleep(self):
+        """close() interrupts reconnect backoff sleep."""
+        respx.get("http://gw/sse").mock(side_effect=httpx.ConnectError("refused"))
+
+        stream = SseStream("http://gw/sse", max_retries=10, initial_delay=10.0, max_delay=10.0)
+
+        async def close_soon():
+            await asyncio.sleep(0.05)
+            stream.close()
+
+        asyncio.create_task(close_soon())
+        events = [ev async for ev in stream]
+        assert events == []
+
+    @respx.mock
+    async def test_non_json_error_body(self):
+        """Non-JSON error body still produces MedkitError with status."""
+        respx.get("http://gw/sse").respond(
+            502,
+            content=b"<html>Bad Gateway</html>",
+            headers={"content-type": "text/html"},
+        )
+
+        stream = SseStream("http://gw/sse", max_retries=0)
+        with pytest.raises(MedkitError) as exc_info:
+            async for _ in stream:
+                pass
+
+        assert exc_info.value.status == 502

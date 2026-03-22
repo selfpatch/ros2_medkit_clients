@@ -12,7 +12,7 @@ from typing import AsyncIterator
 
 import httpx
 
-from ros2_medkit_client.errors import MedkitError
+from ros2_medkit_client.errors import MedkitConnectionError, MedkitError, MedkitTimeoutError
 
 
 @dataclass
@@ -136,7 +136,14 @@ class SseStream:
                 return  # Clean server close
             except MedkitError:
                 raise  # HTTP errors are not retried
-            except Exception:
+            except (
+                httpx.ConnectError,
+                httpx.RemoteProtocolError,
+                httpx.ReadError,
+                httpx.CloseError,
+                OSError,
+                httpx.TimeoutException,
+            ) as exc:
                 if self._closed:
                     return
                 # Reset retries if we received events before disconnection
@@ -145,7 +152,17 @@ class SseStream:
                     self._events_yielded = False
                 retries += 1
                 if retries > self._max_retries:
-                    raise
+                    if isinstance(exc, httpx.TimeoutException):
+                        raise MedkitTimeoutError(
+                            status=0,
+                            code="timeout",
+                            message=str(exc),
+                        ) from exc
+                    raise MedkitConnectionError(
+                        status=0,
+                        code="connection-error",
+                        message=str(exc),
+                    ) from exc
                 # Calculate delay
                 if self._server_retry_delay is not None:
                     delay = max(0.1, min(self._server_retry_delay, self._max_delay))
@@ -171,7 +188,9 @@ class SseStream:
         if self._last_event_id is not None:
             headers["Last-Event-ID"] = self._last_event_id
 
-        async with httpx.AsyncClient() as http:
+        async with httpx.AsyncClient(
+            timeout=httpx.Timeout(connect=10.0, read=None, write=10.0, pool=10.0),
+        ) as http:
             async with http.stream("GET", self._url, headers=headers) as response:
                 if response.status_code >= 400:
                     await response.aread()
