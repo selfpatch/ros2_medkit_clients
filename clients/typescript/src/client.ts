@@ -96,7 +96,24 @@ export type MedkitClient = ReturnType<typeof createClient<paths>> & {
   streams: StreamHelpers;
 };
 
-/** Create a configured Medkit gateway client. */
+/**
+ * Create a configured Medkit gateway client.
+ *
+ * @example
+ * ```ts
+ * import { createMedkitClient } from '@selfpatch/ros2-medkit-client-ts';
+ *
+ * const client = createMedkitClient({ baseUrl: 'localhost:8080' });
+ *
+ * // CRUD operations (fully typed from OpenAPI spec)
+ * const { data, error } = await client.GET('/apps');
+ *
+ * // SSE streaming
+ * for await (const event of client.streams.faults()) {
+ *   console.log(event.data);
+ * }
+ * ```
+ */
 export function createMedkitClient(options: MedkitClientOptions): MedkitClient {
   const baseUrl = normalizeBaseUrl(options.baseUrl);
 

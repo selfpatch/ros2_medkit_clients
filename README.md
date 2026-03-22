@@ -40,6 +40,50 @@ GATEWAY_URL=http://192.168.1.10:8080 ./scripts/export-spec.sh
 npx @stoplight/spectral-cli@6.14.2 lint spec/openapi.yaml
 ```
 
+## TypeScript Client
+
+### Setup
+
+Configure npm to use GitHub Packages for the `@selfpatch` scope:
+
+```bash
+echo "@selfpatch:registry=https://npm.pkg.github.com" >> .npmrc
+```
+
+Install the package:
+
+```bash
+npm install @selfpatch/ros2-medkit-client-ts
+```
+
+### Usage
+
+```typescript
+import { createMedkitClient } from '@selfpatch/ros2-medkit-client-ts';
+
+// Create a client (URL is normalized - adds http:// and /api/v1 if missing)
+const client = createMedkitClient({ baseUrl: 'localhost:8080' });
+
+// CRUD operations - fully typed from the OpenAPI spec
+const { data, error } = await client.GET('/apps');
+if (error) {
+  console.error(error.code, error.message); // MedkitError
+}
+
+// SSE streaming - faults, triggers, subscriptions
+for await (const event of client.streams.faults()) {
+  console.log(event.data);
+}
+
+// With authentication
+const authedClient = createMedkitClient({
+  baseUrl: 'localhost:8080',
+  auth: { token: 'your-jwt-token' },
+});
+```
+
+See `clients/typescript/` for the full source and API.
+
 ## License
 
 Apache 2.0 - see [LICENSE](LICENSE).
