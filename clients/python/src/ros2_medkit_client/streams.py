@@ -64,6 +64,5 @@ class StreamHelpers:
         Note: areas do not support cyclic subscriptions.
         """
         return self._make_stream(
-            f"/{entity_type}/{quote(entity_id, safe='')}"
-            f"/cyclic-subscriptions/{quote(subscription_id, safe='')}/events"
+            f"/{entity_type}/{quote(entity_id, safe='')}/cyclic-subscriptions/{quote(subscription_id, safe='')}/events"
         )

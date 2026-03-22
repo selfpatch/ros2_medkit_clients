@@ -1,0 +1,53 @@
+# Copyright 2026 bburda
+# SPDX-License-Identifier: Apache-2.0
+"""Bulk Data API - bulk data upload, download, and management."""
+
+from ros2_medkit_client._generated.api.bulk_data import (
+    delete_app_bulk_data,
+    delete_component_bulk_data,
+    download_app_bulk_data,
+    download_area_bulk_data,
+    download_component_bulk_data,
+    download_function_bulk_data,
+    download_subarea_bulk_data,
+    download_subcomponent_bulk_data,
+    list_app_bulk_data_categories,
+    list_app_bulk_data_descriptors,
+    list_area_bulk_data_categories,
+    list_area_bulk_data_descriptors,
+    list_component_bulk_data_categories,
+    list_component_bulk_data_descriptors,
+    list_function_bulk_data_categories,
+    list_function_bulk_data_descriptors,
+    list_subarea_bulk_data_categories,
+    list_subarea_bulk_data_descriptors,
+    list_subcomponent_bulk_data_categories,
+    list_subcomponent_bulk_data_descriptors,
+    upload_app_bulk_data,
+    upload_component_bulk_data,
+)
+
+__all__ = [
+    "delete_app_bulk_data",
+    "delete_component_bulk_data",
+    "download_app_bulk_data",
+    "download_area_bulk_data",
+    "download_component_bulk_data",
+    "download_function_bulk_data",
+    "download_subarea_bulk_data",
+    "download_subcomponent_bulk_data",
+    "list_app_bulk_data_categories",
+    "list_app_bulk_data_descriptors",
+    "list_area_bulk_data_categories",
+    "list_area_bulk_data_descriptors",
+    "list_component_bulk_data_categories",
+    "list_component_bulk_data_descriptors",
+    "list_function_bulk_data_categories",
+    "list_function_bulk_data_descriptors",
+    "list_subarea_bulk_data_categories",
+    "list_subarea_bulk_data_descriptors",
+    "list_subcomponent_bulk_data_categories",
+    "list_subcomponent_bulk_data_descriptors",
+    "upload_app_bulk_data",
+    "upload_component_bulk_data",
+]

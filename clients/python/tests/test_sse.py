@@ -328,7 +328,7 @@ class TestSseStream:
     async def test_chunked_data(self):
         """SSE data split across multiple chunks is reassembled correctly."""
         chunks = [
-            b"data: {\"k",
+            b'data: {"k',
             b'ey": "val"}\n',
             b"\n",
         ]
@@ -394,23 +394,17 @@ class TestSseStream:
         route.side_effect = [
             httpx.Response(
                 200,
-                stream=_AsyncChunkStream(
-                    [b"data: e1\n\n"], raise_after=httpx.ReadError("drop")
-                ),
+                stream=_AsyncChunkStream([b"data: e1\n\n"], raise_after=httpx.ReadError("drop")),
                 headers={"content-type": "text/event-stream"},
             ),
             httpx.Response(
                 200,
-                stream=_AsyncChunkStream(
-                    [b"data: e2\n\n"], raise_after=httpx.ReadError("drop")
-                ),
+                stream=_AsyncChunkStream([b"data: e2\n\n"], raise_after=httpx.ReadError("drop")),
                 headers={"content-type": "text/event-stream"},
             ),
             httpx.Response(
                 200,
-                stream=_AsyncChunkStream(
-                    [b"data: e3\n\n"], raise_after=httpx.ReadError("drop")
-                ),
+                stream=_AsyncChunkStream([b"data: e3\n\n"], raise_after=httpx.ReadError("drop")),
                 headers={"content-type": "text/event-stream"},
             ),
             httpx.Response(
@@ -435,9 +429,7 @@ class TestSseStream:
         route.side_effect = [
             httpx.Response(
                 200,
-                stream=_AsyncChunkStream(
-                    [body.encode()], raise_after=httpx.ReadError("drop")
-                ),
+                stream=_AsyncChunkStream([body.encode()], raise_after=httpx.ReadError("drop")),
                 headers={"content-type": "text/event-stream"},
             ),
             httpx.Response(
