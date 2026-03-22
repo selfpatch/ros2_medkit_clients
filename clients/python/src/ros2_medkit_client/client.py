@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import re
 from types import TracebackType
+from typing import Any
 
+from ros2_medkit_client.errors import MedkitError
 from ros2_medkit_client.streams import StreamHelpers
 
 
@@ -77,8 +79,11 @@ class MedkitClient:
         return self._base_url
 
     @property
-    def http(self):
-        """The configured generated Client for use with API functions."""
+    def http(self) -> Any:
+        """The configured generated Client for use with API functions.
+
+        Returns either Client or AuthenticatedClient from the generated code.
+        """
         if self._http is None:
             raise RuntimeError("Client not initialized. Use 'async with MedkitClient(...)' context manager.")
         return self._http
@@ -89,6 +94,52 @@ class MedkitClient:
         if self._streams is None:
             raise RuntimeError("Client not initialized. Use 'async with MedkitClient(...)' context manager.")
         return self._streams
+
+    async def call(self, api_func: Any, **kwargs: Any) -> Any:
+        """Call a generated API function, raising MedkitError on errors.
+
+        Bridges the generated code's return-value error handling into exceptions::
+
+            from ros2_medkit_client.api.discovery import list_apps
+            apps = await client.call(list_apps.asyncio)
+
+        Args:
+            api_func: A generated async API function (e.g., ``list_apps.asyncio``).
+            **kwargs: Additional keyword arguments passed to the API function.
+
+        Returns:
+            The success response (never GenericError or None).
+
+        Raises:
+            MedkitError: If the API returns a GenericError response.
+            MedkitError: If the API returns None (unexpected status code).
+        """
+        result = await api_func(client=self.http, **kwargs)
+
+        if result is None:
+            raise MedkitError(
+                status=0,
+                code="unexpected-status",
+                message="API returned an unexpected status code",
+            )
+
+        # Check if result is a GenericError (has error_code and message attributes
+        # but not items, which would indicate a collection response)
+        if hasattr(result, "error_code") and hasattr(result, "message") and not hasattr(result, "items"):
+            error_code = getattr(result, "error_code", "unknown")
+            message = getattr(result, "message", "Unknown error")
+            parameters = getattr(result, "parameters", None)
+            # Convert Unset sentinel values to None
+            if parameters is not None and not isinstance(parameters, dict):
+                parameters = None
+            raise MedkitError(
+                status=0,
+                code=error_code,
+                message=message,
+                details=parameters if isinstance(parameters, dict) else None,
+            )
+
+        return result
 
     async def __aenter__(self) -> MedkitClient:
         headers: dict[str, str] = {}

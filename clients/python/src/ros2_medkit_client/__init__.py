@@ -9,8 +9,13 @@ Usage::
     from ros2_medkit_client.api.discovery import list_apps
 
     async with MedkitClient(base_url="localhost:8080") as client:
+        # Option 1: call() bridges errors into MedkitError exceptions
+        apps = await client.call(list_apps.asyncio)
+
+        # Option 2: raw API - returns SuccessType | GenericError | None
         result = await list_apps.asyncio(client=client.http)
 
+        # Stream faults via SSE
         async for event in client.streams.faults():
             print(event.data)
 """
