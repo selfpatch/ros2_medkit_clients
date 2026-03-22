@@ -12,8 +12,10 @@ describe('parseGenericError', () => {
     expect(result).toEqual({
       status: 404,
       code: 'entity-not-found',
+      error_code: 'entity-not-found',
       message: 'Entity my_node not found',
       details: undefined,
+      parameters: undefined,
     });
   });
 
@@ -27,8 +29,10 @@ describe('parseGenericError', () => {
     expect(result).toEqual({
       status: 400,
       code: 'validation-error',
+      error_code: 'validation-error',
       message: 'Invalid input',
       details: { field: 'name', reason: 'too long' },
+      parameters: { field: 'name', reason: 'too long' },
     });
   });
 
@@ -37,8 +41,10 @@ describe('parseGenericError', () => {
     expect(result).toEqual({
       status: 500,
       code: 'unknown',
+      error_code: 'unknown',
       message: 'Request failed with status 500',
       details: undefined,
+      parameters: undefined,
     });
   });
 
@@ -46,12 +52,13 @@ describe('parseGenericError', () => {
     const result = parseGenericError(null, 502);
     expect(result.status).toBe(502);
     expect(result.code).toBe('unknown');
+    expect(result.error_code).toBe('unknown');
   });
 });
 
 describe('isMedkitError', () => {
   test('returns true for MedkitError objects', () => {
-    const err: MedkitError = { status: 404, code: 'not-found', message: 'gone' };
+    const err: MedkitError = { status: 404, code: 'not-found', error_code: 'not-found', message: 'gone' };
     expect(isMedkitError(err)).toBe(true);
   });
 
@@ -99,6 +106,7 @@ describe('errorMiddleware', () => {
     const parsed = await result!.json();
     expect(parsed.status).toBe(404);
     expect(parsed.code).toBe('entity-not-found');
+    expect(parsed.error_code).toBe('entity-not-found');
     expect(parsed.message).toBe('Entity x not found');
   });
 

@@ -28,10 +28,13 @@ const DEFAULT_TIMEOUTS: Required<TimeoutConfig> = {
 
 /** Path patterns for timeout tier matching. */
 const OPERATION_PATHS = /\/executions/;
-const DOWNLOAD_PATHS = /\/bulk-data\/[^/]+\/[^/]+\/download/;
+const DOWNLOAD_PATHS = /\/bulk-data\/[^/]+\/[^/]+$/;
 
 /** Normalize a gateway URL: add http:// if missing, append /api/v1 if missing. */
 export function normalizeBaseUrl(url: string): string {
+  if (!url.trim()) {
+    throw new Error('baseUrl is required');
+  }
   let normalized = url;
 
   // Add protocol if missing

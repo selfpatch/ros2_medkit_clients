@@ -77,7 +77,22 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Check if version already published
+        id: version-check
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if npm view "@selfpatch/ros2-medkit-client-ts@${PKG_VERSION}" version 2>/dev/null; then
+            echo "Version ${PKG_VERSION} already published, skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Publishing version ${PKG_VERSION}"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish to GitHub Packages
+        if: steps.version-check.outputs.skip != 'true'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
