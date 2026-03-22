@@ -24,8 +24,8 @@ if [ -z "$openapi_version" ]; then
   exit 1
 fi
 
-# Convert JSON to YAML
-echo "$json_spec" | yq -y . > "$SPEC_OUTPUT"
+# Convert JSON to YAML (portable - no yq dependency)
+python3 -c "import sys, json, yaml; yaml.dump(json.load(sys.stdin), sys.stdout, default_flow_style=False, sort_keys=True)" <<< "$json_spec" > "$SPEC_OUTPUT"
 
 # Extract gateway version from spec
 gateway_version=$(echo "$json_spec" | jq -r '.info.version // "unknown"')

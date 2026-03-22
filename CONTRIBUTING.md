@@ -30,21 +30,15 @@ Thanks for your interest in contributing to ros2_medkit_clients! This guide expl
 ### Development Workflow
 
 1. **Fork the repository** and clone your fork locally
-2. **Install pre-commit hooks** (one-time setup):
-   ```bash
-   pip install pre-commit
-   pre-commit install
-   ```
-3. **Create a branch** from `main` with a descriptive name:
+2. **Create a branch** from `main` with a descriptive name:
    - `feature/short-description` for new features
    - `fix/short-description` for bug fixes
    - `docs/short-description` for documentation changes
-4. **Make your changes** following the project's coding standards
-5. **Test your changes** locally (see Build and Test section below)
-6. **Commit your changes** with clear, descriptive commit messages
-   - Pre-commit hooks will automatically check formatting
-7. **Push your branch** to your fork
-8. **Open a Pull Request** against the `main` branch of this repository
+3. **Make your changes** following the project's coding standards
+4. **Test your changes** locally (see Build and Test section below)
+5. **Commit your changes** with clear, descriptive commit messages
+6. **Push your branch** to your fork
+7. **Open a Pull Request** against the `main` branch of this repository
 
 ### Commit Messages
 
@@ -68,7 +62,7 @@ Before opening or updating a Pull Request, you **must**:
 
 1. Validate the OpenAPI spec:
    ```bash
-   npx @stoplight/spectral-cli lint spec/openapi.yaml
+   npx @stoplight/spectral-cli@6.14.2 lint spec/openapi.yaml
    ```
 
 2. Generate clients to confirm the spec produces valid output:

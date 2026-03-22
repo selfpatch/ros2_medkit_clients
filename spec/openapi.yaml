@@ -692,6 +692,9 @@ info:
     url: https://selfpatch.ai
   description: SOVD-compatible REST API for ROS 2 diagnostics and control. See https://selfpatch.github.io/ros2_medkit/ for
     documentation.
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
   title: ROS 2 Medkit Gateway
   version: 0.4.0
   x-sovd-version: 1.0.0

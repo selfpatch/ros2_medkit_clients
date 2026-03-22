@@ -12,6 +12,14 @@ if [ ! -f "$SPEC_FILE" ]; then
   exit 1
 fi
 
+# Check required tools
+for cmd in npx pipx; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "ERROR: $cmd not found. Install it first." >&2
+    exit 1
+  fi
+done
+
 echo "=== Generating clients from $SPEC_FILE ==="
 
 # --- TypeScript ---

@@ -2,7 +2,7 @@
 
 ## Reporting Security Vulnerabilities
 
-Security vulnerabilities are taken seriously. I appreciate your efforts to responsibly disclose your findings and will make every effort to acknowledge your contributions.
+Security vulnerabilities are taken seriously. We appreciate your efforts to responsibly disclose your findings and will make every effort to acknowledge your contributions.
 
 ### How to Report a Security Vulnerability
 
@@ -31,14 +31,14 @@ To help us understand and resolve the issue quickly, please include:
 
 ### What to Expect
 
-- **Acknowledgement** - I will acknowledge receipt of your report within 5 business days
-- **Updates** - I will keep you informed about progress in addressing the vulnerability
+- **Acknowledgement** - We will acknowledge receipt of your report within 5 business days
+- **Updates** - We will keep you informed about progress in addressing the vulnerability
 - **Credit** - With your permission, you will be credited in any public disclosure of the vulnerability
 - **Timeline** - The goal is to resolve critical vulnerabilities within 90 days of initial report
 
 ### Responsible Disclosure
 
-Please allow reasonable time to investigate and address the vulnerability before making any information public. I commit to:
+Please allow reasonable time to investigate and address the vulnerability before making any information public. We commit to:
 
 - Responding promptly to your report
 - Keeping you updated on progress
@@ -55,6 +55,6 @@ Please allow reasonable time to investigate and address the vulnerability before
 
 ## Questions?
 
-If you have questions about this security policy or the security of ros2_medkit_clients, please open an issue in the repository.
+If you have questions about this security policy, please open an issue in the repository. For anything that could relate to a vulnerability, use the private reporting methods described above instead.
 
 Thank you for helping keep ros2_medkit_clients and its users safe!
