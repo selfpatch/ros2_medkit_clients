@@ -60,7 +60,11 @@ export interface TimeoutConfig {
 export interface MedkitClientOptions {
   /** Gateway base URL. Normalized: adds http:// if missing, appends /api/v1 if missing. */
   baseUrl: string;
-  /** JWT authentication. */
+  /**
+   * JWT authentication. The token is set at client creation time and cannot be
+   * refreshed without creating a new client. For long-lived SSE streams, ensure
+   * the token has sufficient lifetime or recreate the client when the token expires.
+   */
   auth?: {
     token: string;
   };

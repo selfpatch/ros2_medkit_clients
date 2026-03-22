@@ -21,10 +21,11 @@
     "generate": "mkdir -p generated && openapi-typescript ../../spec/openapi.yaml -o generated/schema.d.ts",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {
+  "peerDependencies": {
     "openapi-fetch": "^0.13.0"
   },
   "devDependencies": {
+    "openapi-fetch": "^0.13.0",
     "openapi-typescript": "^7.13.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0",

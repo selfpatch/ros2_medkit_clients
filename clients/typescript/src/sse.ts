@@ -83,6 +83,8 @@ export class SseStream implements AsyncIterable<SseEvent> {
   private static readonly MAX_DATA_SIZE = 256 * 1024; // 256 KB
   private abortController: AbortController | null = null;
   private _eventsYielded = false;
+  private sleepTimer: ReturnType<typeof setTimeout> | null = null;
+  private sleepResolve: (() => void) | null = null;
 
   constructor(url: string, options: SseStreamOptions = {}) {
     this.url = url;
@@ -96,6 +98,14 @@ export class SseStream implements AsyncIterable<SseEvent> {
   close(): void {
     this.closed = true;
     this.abortController?.abort();
+    if (this.sleepTimer) {
+      clearTimeout(this.sleepTimer);
+      this.sleepTimer = null;
+    }
+    if (this.sleepResolve) {
+      this.sleepResolve();
+      this.sleepResolve = null;
+    }
   }
 
   async *[Symbol.asyncIterator](): AsyncGenerator<SseEvent> {
@@ -123,10 +133,20 @@ export class SseStream implements AsyncIterable<SseEvent> {
           throw error;
         }
 
+        // Clamp server retry delay: minimum 100ms to prevent reconnect storms,
+        // maximum maxDelay. SSE spec allows retry:0 for immediate reconnect,
+        // but we enforce a floor to protect against malicious servers.
         const baseDelay = this.serverRetryDelay !== undefined
           ? Math.max(100, Math.min(this.serverRetryDelay, this.maxDelay))
           : Math.min(this.initialDelay * Math.pow(2, retries - 1), this.maxDelay);
-        await sleep(baseDelay);
+        await new Promise<void>((resolve) => {
+          this.sleepResolve = resolve;
+          this.sleepTimer = setTimeout(() => {
+            this.sleepTimer = null;
+            this.sleepResolve = null;
+            resolve();
+          }, baseDelay);
+        });
       }
     }
   }
@@ -177,12 +197,14 @@ export class SseStream implements AsyncIterable<SseEvent> {
           throw new MedkitApiError({
             status: 0,
             code: 'sse-buffer-overflow',
+            error_code: 'sse-buffer-overflow',
             message: 'SSE buffer exceeded maximum size (1 MB). The server may be sending malformed data.',
           });
         }
 
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
+        const rawLines = buffer.split('\n');
+        buffer = rawLines.pop() ?? '';
+        const lines = rawLines.map((l) => l.replace(/\r$/, ''));
 
         for (const line of lines) {
           if (line === '') {
@@ -221,6 +243,7 @@ export class SseStream implements AsyncIterable<SseEvent> {
               throw new MedkitApiError({
                 status: 0,
                 code: 'sse-data-overflow',
+                error_code: 'sse-data-overflow',
                 message: 'SSE event data exceeded maximum size (256 KB).',
               });
             }
@@ -231,8 +254,4 @@ export class SseStream implements AsyncIterable<SseEvent> {
       reader.releaseLock();
     }
   }
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
