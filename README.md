@@ -84,6 +84,40 @@ const authedClient = createMedkitClient({
 
 See `clients/typescript/` for the full source and API.
 
+## Python Client
+
+### Setup
+
+```bash
+pip install ros2-medkit-client --index-url https://pypi.pkg.github.com/selfpatch/simple/
+```
+
+### Usage
+
+```python
+from ros2_medkit_client import MedkitClient, MedkitError
+from ros2_medkit_client.api.discovery import list_apps
+
+async with MedkitClient(base_url="localhost:8080") as client:
+    # Option 1: call() bridges errors into MedkitError exceptions
+    apps = await client.call(list_apps.asyncio)
+
+    # Option 2: raw generated API (returns SuccessType | GenericError | None)
+    result = await list_apps.asyncio(client=client.http)
+
+    # SSE streaming
+    async for event in client.streams.faults():
+        print(event.data)
+
+    # Error handling with call()
+    try:
+        apps = await client.call(list_apps.asyncio)
+    except MedkitError as e:
+        print(e.code, e.message)
+```
+
+See `clients/python/` for the full source and API.
+
 ## License
 
 Apache 2.0 - see [LICENSE](LICENSE).
