@@ -54,11 +54,6 @@ export interface TimeoutConfig {
   operations?: number;
   /** Timeout for bulk data downloads in ms. Default: 300000. */
   downloads?: number;
-  /** SSE keepalive settings. */
-  sse?: {
-    /** Ping timeout in ms. Default: 3000. */
-    ping?: number;
-  };
 }
 
 /** Options for creating a Medkit client. */
