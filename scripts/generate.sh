@@ -46,7 +46,7 @@ if [ -d "$PY_GEN_DIR" ]; then
   rm -rf "$PY_GEN_DIR"
 fi
 
-# Use openapi-python-client to generate async httpx + Pydantic client
+# Use openapi-python-client to generate async httpx + attrs client
 # --meta none skips pyproject.toml generation (we manage that separately)
 pipx run openapi-python-client==0.28.3 generate \
   --path "$SPEC_FILE" \
