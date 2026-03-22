@@ -89,15 +89,8 @@ jobs:
       - name: Build wheel
         run: python -m build
 
-      - name: Check if version already published
-        id: version-check
-        run: |
-          PKG_VERSION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
-          echo "Publishing version ${PKG_VERSION}"
-          echo "version=${PKG_VERSION}" >> "$GITHUB_OUTPUT"
-
       - name: Publish to GitHub Packages
-        run: twine upload --repository-url https://pypi.pkg.github.com/selfpatch/ dist/*
+        run: twine upload --skip-existing --repository-url https://pypi.pkg.github.com/selfpatch/ dist/*
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
