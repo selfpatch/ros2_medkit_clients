@@ -1,4 +1,4 @@
-// Copyright 2026 Selfpatch contributors
+// Copyright 2026 bburda
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -125,7 +125,10 @@ export class SseStream implements AsyncIterable<SseEvent> {
   private async *connectAndStream(): AsyncGenerator<SseEvent> {
     this.abortController = new AbortController();
 
-    const reqHeaders: Record<string, string> = { ...this.headers };
+    const reqHeaders: Record<string, string> = {
+      Accept: 'text/event-stream',
+      ...this.headers,
+    };
     if (this.lastEventId) {
       reqHeaders['Last-Event-ID'] = this.lastEventId;
     }
