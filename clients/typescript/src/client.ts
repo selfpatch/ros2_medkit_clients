@@ -20,11 +20,10 @@ import { errorMiddleware } from './errors.js';
 import { createStreamHelpers, type StreamHelpers } from './streams.js';
 
 /** Default timeout values in ms. */
-const DEFAULT_TIMEOUTS: Required<Omit<TimeoutConfig, 'sse'>> & { sse: { ping: number } } = {
+const DEFAULT_TIMEOUTS: Required<TimeoutConfig> = {
   default: 10_000,
   operations: 30_000,
   downloads: 300_000,
-  sse: { ping: 3_000 },
 };
 
 /** Path patterns for timeout tier matching. */
@@ -113,9 +112,7 @@ export function createMedkitClient(options: MedkitClientOptions): MedkitClient {
   });
 
   // Register middleware: timeout first (sets abort signal), then error handling
-  if (options.timeout) {
-    client.use(createTimeoutMiddleware(options.timeout));
-  }
+  client.use(createTimeoutMiddleware(options.timeout ?? {}));
   client.use(errorMiddleware);
 
   // Attach stream helpers

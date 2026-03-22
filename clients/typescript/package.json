@@ -40,5 +40,6 @@
     "url": "https://github.com/selfpatch/ros2_medkit_clients.git",
     "directory": "clients/typescript"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "engines": { "node": ">=18" }
 }
