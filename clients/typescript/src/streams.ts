@@ -73,7 +73,7 @@ export function createStreamHelpers(
       options?: SseOptions,
     ): SseStream {
       return makeSseStream(
-        `/${entityType}/${entityId}/triggers/${triggerId}/events`,
+        `/${entityType}/${encodeURIComponent(entityId)}/triggers/${encodeURIComponent(triggerId)}/events`,
         options,
       );
     },
@@ -85,7 +85,7 @@ export function createStreamHelpers(
       options?: SseOptions,
     ): SseStream {
       return makeSseStream(
-        `/${entityType}/${entityId}/cyclic-subscriptions/${subscriptionId}/events`,
+        `/${entityType}/${encodeURIComponent(entityId)}/cyclic-subscriptions/${encodeURIComponent(subscriptionId)}/events`,
         options,
       );
     },

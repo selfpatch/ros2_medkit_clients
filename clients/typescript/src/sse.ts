@@ -13,8 +13,7 @@
 // limitations under the License.
 
 import type { SseEvent, SseOptions } from './types.js';
-import { parseGenericError } from './errors.js';
-import type { MedkitError } from './errors.js';
+import { parseGenericError, isMedkitError } from './errors.js';
 
 /** Internal state for parsing SSE lines. */
 export interface SseLineState {
@@ -81,6 +80,7 @@ export class SseStream implements AsyncIterable<SseEvent> {
   private serverRetryDelay: number | undefined;
   private closed = false;
   private abortController: AbortController | null = null;
+  private _eventsYielded = false;
 
   constructor(url: string, options: SseStreamOptions = {}) {
     this.url = url;
@@ -106,8 +106,14 @@ export class SseStream implements AsyncIterable<SseEvent> {
       } catch (error) {
         if (this.closed) return;
 
-        if (isMedkitErrorLike(error)) {
+        if (isMedkitError(error)) {
           throw error; // HTTP errors (4xx/5xx) are not retried
+        }
+
+        // Reset retry counter if we received events before this disconnect
+        if (this._eventsYielded) {
+          retries = 0;
+          this._eventsYielded = false;
         }
 
         retries++;
@@ -115,9 +121,10 @@ export class SseStream implements AsyncIterable<SseEvent> {
           throw error;
         }
 
-        const delay =
-          this.serverRetryDelay ?? Math.min(this.initialDelay * Math.pow(2, retries - 1), this.maxDelay);
-        await sleep(delay);
+        const baseDelay = this.serverRetryDelay !== undefined
+          ? Math.max(100, Math.min(this.serverRetryDelay, this.maxDelay))
+          : Math.min(this.initialDelay * Math.pow(2, retries - 1), this.maxDelay);
+        await sleep(baseDelay);
       }
     }
   }
@@ -190,6 +197,7 @@ export class SseStream implements AsyncIterable<SseEvent> {
                 this.serverRetryDelay = state.retry;
               }
 
+              this._eventsYielded = true;
               yield event;
             }
 
@@ -206,10 +214,6 @@ export class SseStream implements AsyncIterable<SseEvent> {
       reader.releaseLock();
     }
   }
-}
-
-function isMedkitErrorLike(error: unknown): error is MedkitError {
-  return typeof error === 'object' && error !== null && 'status' in error && 'code' in error;
 }
 
 function sleep(ms: number): Promise<void> {
