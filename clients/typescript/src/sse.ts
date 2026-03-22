@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import type { SseEvent, SseOptions } from './types.js';
-import { parseGenericError, isMedkitError } from './errors.js';
+import { parseGenericError, isMedkitError, MedkitApiError } from './errors.js';
 
 /** Internal state for parsing SSE lines. */
 export interface SseLineState {
@@ -79,6 +79,8 @@ export class SseStream implements AsyncIterable<SseEvent> {
   private lastEventId: string | undefined;
   private serverRetryDelay: number | undefined;
   private closed = false;
+  private static readonly MAX_BUFFER_SIZE = 1024 * 1024; // 1 MB
+  private static readonly MAX_DATA_SIZE = 256 * 1024; // 256 KB
   private abortController: AbortController | null = null;
   private _eventsYielded = false;
 
@@ -152,12 +154,12 @@ export class SseStream implements AsyncIterable<SseEvent> {
       } catch {
         body = null;
       }
-      throw parseGenericError(body, response.status);
+      throw new MedkitApiError(parseGenericError(body, response.status));
     }
 
     const reader = response.body?.getReader();
     if (!reader) {
-      throw parseGenericError(null, 0);
+      throw new MedkitApiError(parseGenericError(null, 0));
     }
 
     const decoder = new TextDecoder();
@@ -170,6 +172,14 @@ export class SseStream implements AsyncIterable<SseEvent> {
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
+
+        if (buffer.length > SseStream.MAX_BUFFER_SIZE) {
+          throw new MedkitApiError({
+            status: 0,
+            code: 'sse-buffer-overflow',
+            message: 'SSE buffer exceeded maximum size (1 MB). The server may be sending malformed data.',
+          });
+        }
 
         const lines = buffer.split('\n');
         buffer = lines.pop() ?? '';
@@ -207,6 +217,13 @@ export class SseStream implements AsyncIterable<SseEvent> {
             state.retry = undefined;
           } else {
             parseSseLine(line, state);
+            if (state.data.length > SseStream.MAX_DATA_SIZE) {
+              throw new MedkitApiError({
+                status: 0,
+                code: 'sse-data-overflow',
+                message: 'SSE event data exceeded maximum size (256 KB).',
+              });
+            }
           }
         }
       }

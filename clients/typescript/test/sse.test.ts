@@ -134,6 +134,8 @@ describe('SseStream', () => {
       expect.unreachable('should have thrown');
     } catch (e) {
       expect(e).toMatchObject({ status: 401, code: 'unauthorized' });
+      expect(e).toBeInstanceOf(Error);
+      expect((e as Error).stack).toBeDefined();
     }
     expect(events).toHaveLength(0);
   });
@@ -326,5 +328,35 @@ describe('SseStream', () => {
     }
 
     expect(capturedHeaders[1]?.get('Last-Event-ID')).toBe('42');
+  });
+
+  test('throws on SSE buffer overflow', async () => {
+    const encoder = new TextEncoder();
+    // Create a huge chunk without newlines
+    const hugeChunk = 'x'.repeat(1024 * 1024 + 1);
+
+    const mockFetch = vi.fn(async () =>
+      new Response(new ReadableStream({
+        start(controller) {
+          controller.enqueue(encoder.encode(hugeChunk));
+          controller.close();
+        },
+      }), { status: 200 }),
+    );
+
+    const stream = new SseStream('http://localhost/test', {
+      fetch: mockFetch,
+      maxRetries: 0,
+    });
+
+    try {
+      for await (const _event of stream) {
+        // should not yield
+      }
+      expect.unreachable('should have thrown');
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+      expect(e).toMatchObject({ code: 'sse-buffer-overflow' });
+    }
   });
 });

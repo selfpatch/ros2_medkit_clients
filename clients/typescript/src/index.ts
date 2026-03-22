@@ -17,7 +17,7 @@ export { createMedkitClient, normalizeBaseUrl, getTimeoutForPath } from './clien
 export type { MedkitClient } from './client.js';
 
 // Error types and utilities
-export { parseGenericError, isMedkitError, errorMiddleware } from './errors.js';
+export { parseGenericError, isMedkitError, errorMiddleware, MedkitApiError } from './errors.js';
 export type { MedkitError } from './errors.js';
 
 // SSE
