@@ -172,4 +172,28 @@ describe('createMedkitClient', () => {
     await client.GET('/apps');
     expect(mockFetch).toHaveBeenCalledOnce();
   });
+
+  test('error middleware transforms 4xx into MedkitError', async () => {
+    const mockFetch = vi.fn(async () =>
+      new Response(JSON.stringify({ error_code: 'entity-not-found', message: 'App x not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+
+    const client = createMedkitClient({
+      baseUrl: 'localhost:8080',
+      fetch: mockFetch,
+    });
+
+    const { error } = await client.GET('/apps/{app_id}', {
+      params: { path: { app_id: 'x' } },
+    });
+
+    expect(error).toBeDefined();
+    // The error body has been transformed by errorMiddleware
+    const errorBody = error as unknown as Record<string, unknown>;
+    expect(errorBody.code).toBe('entity-not-found');
+    expect(errorBody.status).toBe(404);
+  });
 });

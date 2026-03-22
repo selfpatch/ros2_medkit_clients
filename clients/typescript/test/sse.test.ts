@@ -330,6 +330,83 @@ describe('SseStream', () => {
     expect(capturedHeaders[1]?.get('Last-Event-ID')).toBe('42');
   });
 
+  test('handles SSE data split across multiple chunks', async () => {
+    const encoder = new TextEncoder();
+    const chunk1 = 'data: {"id":';
+    const chunk2 = '"f1"}\n\ndata: {"id":"f2"}\n\n';
+
+    const mockFetch = vi.fn(async () =>
+      new Response(new ReadableStream({
+        start(controller) {
+          controller.enqueue(encoder.encode(chunk1));
+          controller.enqueue(encoder.encode(chunk2));
+          controller.close();
+        },
+      }), { status: 200 }),
+    );
+
+    const stream = new SseStream('http://localhost/test', {
+      fetch: mockFetch,
+      maxRetries: 0,
+    });
+
+    const events: SseEvent[] = [];
+    for await (const event of stream) {
+      events.push(event);
+    }
+
+    expect(events).toHaveLength(2);
+    expect(events[0].data).toEqual({ id: 'f1' });
+    expect(events[1].data).toEqual({ id: 'f2' });
+  });
+
+  test('throws after maxRetries exhaustion', async () => {
+    const mockFetch = vi.fn(async () => {
+      throw new TypeError('Failed to fetch');
+    });
+
+    const stream = new SseStream('http://localhost/test', {
+      fetch: mockFetch,
+      maxRetries: 2,
+      initialDelay: 10,
+      maxDelay: 20,
+    });
+
+    try {
+      for await (const _event of stream) {
+        // should not yield
+      }
+      expect.unreachable('should have thrown');
+    } catch (e) {
+      expect(e).toBeInstanceOf(TypeError);
+      expect((e as Error).message).toBe('Failed to fetch');
+    }
+
+    // Initial attempt + 2 retries = 3 total calls
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+
+  test('throws on response with no body', async () => {
+    const mockFetch = vi.fn(async () =>
+      new Response(null, { status: 200 }),
+    );
+
+    const stream = new SseStream('http://localhost/test', {
+      fetch: mockFetch,
+      maxRetries: 0,
+    });
+
+    try {
+      for await (const _event of stream) {
+        // should not yield
+      }
+      expect.unreachable('should have thrown');
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+      expect(e).toMatchObject({ code: 'unknown', status: 0 });
+    }
+  });
+
   test('throws on SSE buffer overflow', async () => {
     const encoder = new TextEncoder();
     // Create a huge chunk without newlines
