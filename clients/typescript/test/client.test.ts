@@ -29,6 +29,14 @@ describe('normalizeBaseUrl', () => {
   test('handles ip address with port', () => {
     expect(normalizeBaseUrl('192.168.1.10:8080')).toBe('http://192.168.1.10:8080/api/v1');
   });
+
+  test('throws on empty string', () => {
+    expect(() => normalizeBaseUrl('')).toThrow('baseUrl is required');
+  });
+
+  test('throws on whitespace-only string', () => {
+    expect(() => normalizeBaseUrl('  ')).toThrow('baseUrl is required');
+  });
 });
 
 describe('getTimeoutForPath', () => {
@@ -44,7 +52,7 @@ describe('getTimeoutForPath', () => {
   });
 
   test('returns downloads timeout for bulk-data download paths', () => {
-    expect(getTimeoutForPath('/api/v1/apps/node1/bulk-data/cat1/file1/download', config)).toBe(300_000);
+    expect(getTimeoutForPath('/api/v1/apps/node1/bulk-data/cat1/file1', config)).toBe(300_000);
   });
 
   test('uses defaults when config is empty', () => {
@@ -194,6 +202,7 @@ describe('createMedkitClient', () => {
     // The error body has been transformed by errorMiddleware
     const errorBody = error as unknown as Record<string, unknown>;
     expect(errorBody.code).toBe('entity-not-found');
+    expect(errorBody.error_code).toBe('entity-not-found');
     expect(errorBody.status).toBe(404);
   });
 });

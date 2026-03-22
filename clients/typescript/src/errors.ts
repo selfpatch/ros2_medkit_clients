@@ -20,24 +20,32 @@ export interface MedkitError {
   status: number;
   /** Error code from GenericError.error_code. */
   code: string;
+  /** Original GenericError field name for openapi-fetch type compat. */
+  error_code: string;
   /** Human-readable error message. */
   message: string;
   /** Additional error details from GenericError.parameters. */
   details?: Record<string, unknown>;
+  /** Original GenericError field name for openapi-fetch type compat. */
+  parameters?: Record<string, unknown>;
 }
 
 /** Error class thrown by SSE streams and other async operations. Extends Error for stack traces. */
 export class MedkitApiError extends Error implements MedkitError {
   readonly status: number;
   readonly code: string;
+  readonly error_code: string;
   readonly details?: Record<string, unknown>;
+  readonly parameters?: Record<string, unknown>;
 
   constructor(error: MedkitError) {
     super(error.message);
     this.name = 'MedkitApiError';
     this.status = error.status;
     this.code = error.code;
+    this.error_code = error.error_code;
     this.details = error.details;
+    this.parameters = error.parameters;
   }
 }
 
@@ -48,9 +56,11 @@ export function isMedkitError(value: unknown): value is MedkitError {
     value !== null &&
     'status' in value &&
     'code' in value &&
+    'error_code' in value &&
     'message' in value &&
     typeof (value as MedkitError).status === 'number' &&
     typeof (value as MedkitError).code === 'string' &&
+    typeof (value as MedkitError).error_code === 'string' &&
     typeof (value as MedkitError).message === 'string'
   );
 }
@@ -73,16 +83,20 @@ export function parseGenericError(body: unknown, status: number): MedkitError {
     return {
       status,
       code: b.error_code as string,
+      error_code: b.error_code as string,
       message: b.message as string,
       details: b.parameters as Record<string, unknown> | undefined,
+      parameters: b.parameters as Record<string, unknown> | undefined,
     };
   }
 
   return {
     status,
     code: 'unknown',
+    error_code: 'unknown',
     message: `Request failed with status ${status}`,
     details: undefined,
+    parameters: undefined,
   };
 }
 
