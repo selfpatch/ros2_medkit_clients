@@ -26,6 +26,21 @@ export interface MedkitError {
   details?: Record<string, unknown>;
 }
 
+/** Error class thrown by SSE streams and other async operations. Extends Error for stack traces. */
+export class MedkitApiError extends Error implements MedkitError {
+  readonly status: number;
+  readonly code: string;
+  readonly details?: Record<string, unknown>;
+
+  constructor(error: MedkitError) {
+    super(error.message);
+    this.name = 'MedkitApiError';
+    this.status = error.status;
+    this.code = error.code;
+    this.details = error.details;
+  }
+}
+
 /** Type guard for MedkitError. */
 export function isMedkitError(value: unknown): value is MedkitError {
   return (
