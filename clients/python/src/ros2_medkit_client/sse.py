@@ -8,7 +8,7 @@ from __future__ import annotations
 import asyncio
 import json
 from dataclasses import dataclass
-from typing import AsyncIterator
+from typing import Any, AsyncIterator
 
 import httpx
 
@@ -20,7 +20,7 @@ class SseEvent:
     """A single Server-Sent Event."""
 
     event: str = "message"
-    data: object = None
+    data: Any = None
     id: str | None = None
 
 
