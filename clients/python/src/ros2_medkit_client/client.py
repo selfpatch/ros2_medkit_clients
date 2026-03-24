@@ -72,6 +72,8 @@ class MedkitClient:
         self._timeout = timeout
         self._http = None
         self._streams: StreamHelpers | None = None
+        self._entered = False
+        self._generated_available = False
 
     @property
     def base_url(self) -> str:
@@ -85,6 +87,12 @@ class MedkitClient:
         Returns either Client or AuthenticatedClient from the generated code.
         """
         if self._http is None:
+            if self._entered and not self._generated_available:
+                raise RuntimeError(
+                    "Generated API client not available. Run code generation first "
+                    "(./scripts/generate.sh && ln -sf ../../generated src/ros2_medkit_client/_generated). "
+                    "SSE streaming via client.streams is still available."
+                )
             raise RuntimeError("Client not initialized. Use 'async with MedkitClient(...)' context manager.")
         return self._http
 
@@ -163,9 +171,12 @@ class MedkitClient:
                 )
             # Enter the generated client's async context (initializes httpx.AsyncClient)
             await self._http.__aenter__()
+            self._generated_available = True
         except ImportError:
             # Generated code not available - SSE-only mode
             self._http = None
+
+        self._entered = True
 
         self._streams = StreamHelpers(
             base_url=self._base_url,
