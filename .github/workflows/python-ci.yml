@@ -39,8 +39,8 @@ jobs:
         working-directory: .
         run: ./scripts/generate.sh
 
-      - name: Set up generated symlink
-        run: ln -sf ../../generated src/ros2_medkit_client/_generated
+      - name: Copy generated code into package
+        run: rm -rf src/ros2_medkit_client/_generated && cp -r generated src/ros2_medkit_client/_generated
 
       - name: Install package with dev deps
         run: pip install -e '.[dev]'
@@ -82,8 +82,8 @@ jobs:
         working-directory: .
         run: ./scripts/generate.sh
 
-      - name: Set up generated symlink
-        run: ln -sf ../../generated src/ros2_medkit_client/_generated
+      - name: Copy generated code into package
+        run: rm -rf src/ros2_medkit_client/_generated && cp -r generated src/ros2_medkit_client/_generated
 
       - name: Build wheel
         run: python -m build
