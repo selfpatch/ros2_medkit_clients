@@ -1,6 +1,6 @@
 {
   "name": "@selfpatch/ros2-medkit-client-ts",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "Type-safe TypeScript client for the ros2_medkit gateway",
   "type": "module",
   "main": "./dist/index.js",
@@ -34,7 +34,8 @@
     "typescript-eslint": "^8.0.0"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   },
   "repository": {
     "type": "git",
