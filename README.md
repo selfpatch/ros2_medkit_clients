@@ -44,14 +44,6 @@ npx @stoplight/spectral-cli@6.14.2 lint spec/openapi.yaml
 
 ### Setup
 
-Configure npm to use GitHub Packages for the `@selfpatch` scope:
-
-```bash
-echo "@selfpatch:registry=https://npm.pkg.github.com" >> .npmrc
-```
-
-Install the package and its peer dependency:
-
 ```bash
 npm install @selfpatch/ros2-medkit-client-ts openapi-fetch
 ```
