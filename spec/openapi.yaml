@@ -7903,7 +7903,7 @@ paths:
       - Server
 servers:
 - description: Gateway server
-  url: http://127.0.0.1:9600/api/v1
+  url: http://localhost:8080/api/v1
 tags:
 - description: Gateway health, metadata, and version info
   name: Server
