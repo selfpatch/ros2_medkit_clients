@@ -22,10 +22,10 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "openapi-fetch": "^0.13.0"
+    "openapi-fetch": "^0.17.0"
   },
   "devDependencies": {
-    "openapi-fetch": "^0.13.0",
+    "openapi-fetch": "^0.17.0",
     "openapi-typescript": "^7.13.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0",
