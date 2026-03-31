@@ -7,6 +7,24 @@ components:
             $ref: '#/components/schemas/GenericError'
       description: SOVD GenericError response
   schemas:
+    AcquireLockRequest:
+      properties:
+        break_lock:
+          description: 'Force-acquire by breaking an existing lock (default: false)'
+          type: boolean
+        lock_expiration:
+          description: Lock duration in seconds
+          example: 300
+          minimum: 1
+          type: integer
+        scopes:
+          description: Lock scopes (e.g. 'configurations', 'operations')
+          items:
+            type: string
+          type: array
+      required:
+      - lock_expiration
+      type: object
     AuthCredentials:
       properties:
         password:
@@ -62,6 +80,7 @@ components:
         size:
           type: integer
         x-medkit:
+          additionalProperties: true
           type: object
       required:
       - id
@@ -208,6 +227,7 @@ components:
         name:
           type: string
         x-medkit:
+          additionalProperties: true
           type: object
       required:
       - id
@@ -221,6 +241,17 @@ components:
           type: array
       required:
       - items
+      type: object
+    DataWriteRequest:
+      properties:
+        data:
+          description: Message value to publish
+        type:
+          description: ROS 2 message type (e.g. 'std_msgs/msg/Float32')
+          type: string
+      required:
+      - type
+      - data
       type: object
     EntityDetail:
       properties:
@@ -244,6 +275,29 @@ components:
           type: array
       required:
       - items
+      type: object
+    ExecutionUpdateRequest:
+      properties:
+        capability:
+          description: Control command for the running execution
+          enum:
+          - stop
+          - execute
+          - freeze
+          - reset
+          type: string
+      required:
+      - capability
+      type: object
+    ExtendLockRequest:
+      properties:
+        lock_expiration:
+          description: Additional seconds to extend the lock
+          example: 120
+          minimum: 1
+          type: integer
+      required:
+      - lock_expiration
       type: object
     FaultDetail:
       properties:
@@ -276,6 +330,7 @@ components:
                   type:
                     type: string
                   x-medkit:
+                    additionalProperties: true
                     type: object
                 type: object
               type: array
@@ -311,6 +366,7 @@ components:
           - status
           type: object
         x-medkit:
+          additionalProperties: true
           properties:
             occurrence_count:
               type: integer
@@ -447,12 +503,17 @@ components:
     LogConfiguration:
       properties:
         max_entries:
+          maximum: 10000
+          minimum: 1
           type: integer
         severity_filter:
+          enum:
+          - debug
+          - info
+          - warning
+          - error
+          - fatal
           type: string
-      required:
-      - severity_filter
-      - max_entries
       type: object
     LogEntry:
       properties:
@@ -542,6 +603,7 @@ components:
           description: Whether proximity proof is needed
           type: boolean
         x-medkit:
+          additionalProperties: true
           type: object
       required:
       - id
@@ -626,6 +688,17 @@ components:
       - endpoints
       - capabilities
       type: object
+    ScriptControlRequest:
+      properties:
+        action:
+          description: Control action for the running script execution
+          enum:
+          - stop
+          - forced_termination
+          type: string
+      required:
+      - action
+      type: object
     ScriptExecution:
       properties:
         completed_at:
@@ -659,7 +732,9 @@ components:
         name:
           type: string
         parameters_schema:
-          type: object
+          type:
+          - object
+          - 'null'
         proximity_proof_required:
           type: boolean
       required:
@@ -718,6 +793,7 @@ components:
           - terminated
           type: string
         trigger_condition:
+          additionalProperties: true
           properties:
             condition_type:
               type: string
@@ -752,6 +828,7 @@ components:
           description: Resource URI to observe
           type: string
         trigger_condition:
+          additionalProperties: true
           properties:
             condition_type:
               type: string
@@ -1581,7 +1658,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/DataWriteRequest'
         description: Data value to write
         required: true
       responses:
@@ -1770,6 +1847,15 @@ paths:
       description: Lists all active locks on this app.
       operationId: listAppLocks
       parameters:
+      - description: When provided, the 'owned' field indicates whether this client
+          owns the lock
+        in: header
+        name: X-Client-Id
+        required: false
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The app identifier
         in: path
         name: app_id
@@ -1796,6 +1882,14 @@ paths:
       description: Acquires an exclusive lock on this app.
       operationId: acquireAppLock
       parameters:
+      - description: Unique client identifier for lock ownership
+        in: header
+        name: X-Client-Id
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The app identifier
         in: path
         name: app_id
@@ -1806,7 +1900,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Lock'
+              $ref: '#/components/schemas/AcquireLockRequest'
         description: Lock parameters
         required: true
       responses:
@@ -1830,6 +1924,14 @@ paths:
       description: Releases a lock on this app.
       operationId: releaseAppLock
       parameters:
+      - description: Unique client identifier for lock ownership
+        in: header
+        name: X-Client-Id
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The app identifier
         in: path
         name: app_id
@@ -1858,6 +1960,15 @@ paths:
       description: Returns details of a specific lock on this app.
       operationId: getAppLock
       parameters:
+      - description: When provided, the 'owned' field indicates whether this client
+          owns the lock
+        in: header
+        name: X-Client-Id
+        required: false
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The app identifier
         in: path
         name: app_id
@@ -1890,6 +2001,14 @@ paths:
       description: Extends the expiration of a lock on this app.
       operationId: extendAppLock
       parameters:
+      - description: Unique client identifier for lock ownership
+        in: header
+        name: X-Client-Id
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The app identifier
         in: path
         name: app_id
@@ -1906,15 +2025,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Lock'
+              $ref: '#/components/schemas/ExtendLockRequest'
         description: Lock extension
         required: true
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Lock'
+        '204':
           description: Lock extended
         '400':
           $ref: '#/components/responses/GenericError'
@@ -2247,7 +2362,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/ExecutionUpdateRequest'
         description: Execution control
         required: true
       responses:
@@ -2527,7 +2642,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/ScriptControlRequest'
         description: Execution control
         required: true
       responses:
@@ -3233,7 +3348,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/DataWriteRequest'
         description: Data value to write
         required: true
       responses:
@@ -3685,7 +3800,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/ExecutionUpdateRequest'
         description: Execution control
         required: true
       responses:
@@ -4826,7 +4941,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/DataWriteRequest'
         description: Data value to write
         required: true
       responses:
@@ -5015,6 +5130,15 @@ paths:
       description: Lists all active locks on this component.
       operationId: listComponentLocks
       parameters:
+      - description: When provided, the 'owned' field indicates whether this client
+          owns the lock
+        in: header
+        name: X-Client-Id
+        required: false
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The component identifier
         in: path
         name: component_id
@@ -5041,6 +5165,14 @@ paths:
       description: Acquires an exclusive lock on this component.
       operationId: acquireComponentLock
       parameters:
+      - description: Unique client identifier for lock ownership
+        in: header
+        name: X-Client-Id
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The component identifier
         in: path
         name: component_id
@@ -5051,7 +5183,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Lock'
+              $ref: '#/components/schemas/AcquireLockRequest'
         description: Lock parameters
         required: true
       responses:
@@ -5075,6 +5207,14 @@ paths:
       description: Releases a lock on this component.
       operationId: releaseComponentLock
       parameters:
+      - description: Unique client identifier for lock ownership
+        in: header
+        name: X-Client-Id
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The component identifier
         in: path
         name: component_id
@@ -5103,6 +5243,15 @@ paths:
       description: Returns details of a specific lock on this component.
       operationId: getComponentLock
       parameters:
+      - description: When provided, the 'owned' field indicates whether this client
+          owns the lock
+        in: header
+        name: X-Client-Id
+        required: false
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The component identifier
         in: path
         name: component_id
@@ -5135,6 +5284,14 @@ paths:
       description: Extends the expiration of a lock on this component.
       operationId: extendComponentLock
       parameters:
+      - description: Unique client identifier for lock ownership
+        in: header
+        name: X-Client-Id
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          type: string
       - description: The component identifier
         in: path
         name: component_id
@@ -5151,15 +5308,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Lock'
+              $ref: '#/components/schemas/ExtendLockRequest'
         description: Lock extension
         required: true
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Lock'
+        '204':
           description: Lock extended
         '400':
           $ref: '#/components/responses/GenericError'
@@ -5492,7 +5645,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/ExecutionUpdateRequest'
         description: Execution control
         required: true
       responses:
@@ -5772,7 +5925,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/ScriptControlRequest'
         description: Execution control
         required: true
       responses:
@@ -6809,7 +6962,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/DataWriteRequest'
         description: Data value to write
         required: true
       responses:
@@ -7288,7 +7441,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/ExecutionUpdateRequest'
         description: Execution control
         required: true
       responses:
@@ -7750,7 +7903,7 @@ paths:
       - Server
 servers:
 - description: Gateway server
-  url: http://127.0.0.1:8080/api/v1
+  url: http://127.0.0.1:9600/api/v1
 tags:
 - description: Gateway health, metadata, and version info
   name: Server
