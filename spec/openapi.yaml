@@ -10,30 +10,318 @@ components:
     AcquireLockRequest:
       properties:
         break_lock:
-          description: 'Force-acquire by breaking an existing lock (default: false)'
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
         lock_expiration:
-          description: Lock duration in seconds
-          example: 300
-          minimum: 1
           type: integer
         scopes:
-          description: Lock scopes (e.g. 'configurations', 'operations')
-          items:
-            type: string
-          type: array
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
       required:
       - lock_expiration
       type: object
+    AppDetail:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        belongs-to:
+          anyOf:
+          - type: string
+          - type: 'null'
+        bulk-data:
+          type: string
+        capabilities:
+          anyOf:
+          - {}
+          - type: 'null'
+        configurations:
+          type: string
+        cyclic-subscriptions:
+          type: string
+        data:
+          type: string
+        depends-on:
+          anyOf:
+          - type: string
+          - type: 'null'
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        faults:
+          type: string
+        id:
+          type: string
+        is-located-on:
+          anyOf:
+          - type: string
+          - type: 'null'
+        logs:
+          type: string
+        name:
+          type: string
+        operations:
+          type: string
+        scripts:
+          anyOf:
+          - type: string
+          - type: 'null'
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        translation_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        triggers:
+          type: string
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitApp'
+          - type: 'null'
+      required:
+      - id
+      - name
+      - type
+      - data
+      - operations
+      - configurations
+      - faults
+      - logs
+      - bulk-data
+      - cyclic-subscriptions
+      - triggers
+      type: object
+    AppList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/AppListItem'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
+      required:
+      - items
+      type: object
+    AppListItem:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        href:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitApp'
+          - type: 'null'
+      required:
+      - id
+      - name
+      - href
+      - type
+      type: object
+    AreaDetail:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        bulk-data:
+          type: string
+        capabilities:
+          anyOf:
+          - {}
+          - type: 'null'
+        components:
+          type: string
+        configurations:
+          type: string
+        contains:
+          type: string
+        data:
+          type: string
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        faults:
+          type: string
+        id:
+          type: string
+        logs:
+          type: string
+        name:
+          type: string
+        operations:
+          type: string
+        subareas:
+          type: string
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        triggers:
+          type: string
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitArea'
+          - type: 'null'
+      required:
+      - id
+      - name
+      - type
+      - subareas
+      - components
+      - contains
+      - data
+      - operations
+      - configurations
+      - faults
+      - logs
+      - bulk-data
+      - triggers
+      type: object
+    AreaList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/AreaListItem'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
+      required:
+      - items
+      type: object
+    AreaListItem:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        href:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitArea'
+          - type: 'null'
+      required:
+      - id
+      - name
+      - href
+      - type
+      type: object
     AuthCredentials:
       properties:
-        password:
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        client_secret:
+          anyOf:
+          - type: string
+          - type: 'null'
+        grant_type:
           type: string
-        username:
+        refresh_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+        scope:
+          anyOf:
+          - type: string
+          - type: 'null'
+      required:
+      - grant_type
+      type: object
+    AuthRevokeRequest:
+      properties:
+        token:
+          type: string
+        token_type_hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+      required:
+      - token
+      type: object
+    AuthRevokeResponse:
+      properties:
+        status:
           type: string
       required:
-      - username
-      - password
+      - status
       type: object
     AuthTokenResponse:
       properties:
@@ -42,7 +330,9 @@ components:
         expires_in:
           type: integer
         refresh_token:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         scope:
           type: string
         token_type:
@@ -51,6 +341,7 @@ components:
       - access_token
       - token_type
       - expires_in
+      - scope
       type: object
     BulkDataCategoryList:
       properties:
@@ -64,36 +355,265 @@ components:
     BulkDataDescriptor:
       properties:
         creation_date:
-          description: ISO 8601 creation timestamp
-          format: date-time
           type: string
         description:
-          description: Human-readable description
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         id:
           type: string
         mimetype:
-          description: MIME type of the file
           type: string
         name:
           type: string
         size:
           type: integer
         x-medkit:
-          additionalProperties: true
-          type: object
+          anyOf:
+          - {}
+          - type: 'null'
       required:
       - id
       - name
+      - mimetype
+      - size
+      - creation_date
       type: object
     BulkDataDescriptorList:
       properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
         items:
           items:
             $ref: '#/components/schemas/BulkDataDescriptor'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
       required:
       - items
+      type: object
+    ComponentDetail:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        belongs-to:
+          anyOf:
+          - type: string
+          - type: 'null'
+        bulk-data:
+          type: string
+        capabilities:
+          anyOf:
+          - {}
+          - type: 'null'
+        configurations:
+          type: string
+        cyclic-subscriptions:
+          type: string
+        data:
+          type: string
+        depends-on:
+          anyOf:
+          - type: string
+          - type: 'null'
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        faults:
+          type: string
+        hosts:
+          type: string
+        id:
+          type: string
+        logs:
+          type: string
+        name:
+          type: string
+        operations:
+          type: string
+        scripts:
+          anyOf:
+          - type: string
+          - type: 'null'
+        subcomponents:
+          type: string
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        triggers:
+          type: string
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitComponent'
+          - type: 'null'
+      required:
+      - id
+      - name
+      - type
+      - data
+      - operations
+      - configurations
+      - faults
+      - subcomponents
+      - hosts
+      - logs
+      - bulk-data
+      - cyclic-subscriptions
+      - triggers
+      type: object
+    ComponentList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/ComponentListItem'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
+      required:
+      - items
+      type: object
+    ComponentListItem:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        href:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitComponent'
+          - type: 'null'
+      required:
+      - id
+      - name
+      - href
+      - type
+      type: object
+    ConfigListXMedkit:
+      properties:
+        aggregation_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        failed_peers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        is_aggregated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        parameters:
+          anyOf:
+          - {}
+          - type: 'null'
+        partial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        peer_dropped_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DroppedItem'
+            type: array
+          - type: 'null'
+        queried_nodes:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+        source_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+      type: object
+    ConfigValueXMedkit:
+      properties:
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        parameter:
+          anyOf:
+          - {}
+          - type: 'null'
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+        source_app:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    ConfigXMedkitItem:
+      properties:
+        node:
+          anyOf:
+          - type: string
+          - type: 'null'
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
       type: object
     ConfigurationDeleteMultiStatus:
       properties:
@@ -101,83 +621,106 @@ components:
           type: string
         results:
           items:
-            properties:
-              app_id:
-                type: string
-              error:
-                type: string
-              node:
-                type: string
-              success:
-                type: boolean
-            type: object
+            $ref: '#/components/schemas/ConfigurationDeleteResultItem'
           type: array
       required:
       - entity_id
       - results
       type: object
+    ConfigurationDeleteResultItem:
+      properties:
+        app_id:
+          type: string
+        details:
+          anyOf:
+          - {}
+          - type: 'null'
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+        node:
+          type: string
+        success:
+          type: boolean
+      required:
+      - node
+      - app_id
+      - success
+      type: object
+    ConfigurationList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/ConfigurationMetaData'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/ConfigListXMedkit'
+          - type: 'null'
+      required:
+      - items
+      type: object
     ConfigurationMetaData:
       properties:
         id:
-          description: Configuration parameter ID
           type: string
         name:
-          description: Parameter name
           type: string
         type:
-          description: Parameter type (e.g. 'parameter')
           type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/ConfigXMedkitItem'
+          - type: 'null'
       required:
       - id
       - name
       - type
       type: object
-    ConfigurationMetaDataList:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/ConfigurationMetaData'
-          type: array
-      required:
-      - items
-      type: object
     ConfigurationReadValue:
       properties:
-        data:
-          description: Configuration value (type varies by parameter)
+        data: {}
         id:
-          description: Configuration parameter ID
           type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/ConfigValueXMedkit'
+          - type: 'null'
       required:
       - id
       - data
       type: object
-    ConfigurationWriteValue:
+    ConfigurationWriteRequest:
       properties:
         data:
-          description: Configuration value to set (type varies by parameter)
-      required:
-      - data
+          anyOf:
+          - {}
+          - type: 'null'
+        value:
+          anyOf:
+          - {}
+          - type: 'null'
       type: object
     CyclicSubscription:
       properties:
         event_source:
-          description: Server-generated event source URI
           type: string
         id:
           type: string
         interval:
-          description: Polling interval
           enum:
           - fast
           - normal
           - slow
           type: string
         observed_resource:
-          description: Resource URI being observed
           type: string
         protocol:
-          description: Transport protocol
           type: string
       required:
       - id
@@ -189,20 +732,14 @@ components:
     CyclicSubscriptionCreateRequest:
       properties:
         duration:
-          description: Subscription duration in seconds
-          minimum: 1
           type: integer
         interval:
-          enum:
-          - fast
-          - normal
-          - slow
           type: string
         protocol:
-          description: 'Transport protocol (default: sse)'
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         resource:
-          description: Resource URI to subscribe to
           type: string
       required:
       - resource
@@ -211,12 +748,31 @@ components:
       type: object
     CyclicSubscriptionList:
       properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
         items:
           items:
             $ref: '#/components/schemas/CyclicSubscription'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
       required:
       - items
+      type: object
+    CyclicSubscriptionUpdateRequest:
+      properties:
+        duration:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        interval:
+          anyOf:
+          - type: string
+          - type: 'null'
       type: object
     DataItem:
       properties:
@@ -227,349 +783,110 @@ components:
         name:
           type: string
         x-medkit:
-          additionalProperties: true
-          type: object
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitDataItem'
+          - type: 'null'
       required:
       - id
       - name
+      - category
       type: object
-    DataItemList:
+    DataList:
       properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
         items:
           items:
             $ref: '#/components/schemas/DataItem'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/DataListXMedkit'
+          - type: 'null'
       required:
       - items
       type: object
+    DataListResult:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
+    DataListXMedkit:
+      properties:
+        aggregated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        aggregation_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+        aggregation_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        failed_peers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        partial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        peer_dropped_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DroppedItem'
+            type: array
+          - type: 'null'
+        total_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+      type: object
+    DataValue:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
     DataWriteRequest:
       properties:
-        data:
-          description: Message value to publish
+        data: {}
         type:
-          description: ROS 2 message type (e.g. 'std_msgs/msg/Float32')
           type: string
       required:
       - type
       - data
       type: object
-    EntityDetail:
+    DataWriteResult:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
+    DroppedItem:
+      properties:
+        peer:
+          type: string
+        reason:
+          type: string
+        source_id:
+          type: string
+      required:
+      - peer
+      - reason
+      - source_id
+      type: object
+    ExecutionCreateAsync:
       properties:
         id:
           type: string
-        name:
-          type: string
-        type:
-          type: string
-        uri:
-          type: string
-      required:
-      - id
-      - name
-      type: object
-    EntityList:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/EntityDetail'
-          type: array
-      required:
-      - items
-      type: object
-    ExecutionUpdateRequest:
-      properties:
-        capability:
-          description: Control command for the running execution
-          enum:
-          - stop
-          - execute
-          - freeze
-          - reset
-          type: string
-      required:
-      - capability
-      type: object
-    ExtendLockRequest:
-      properties:
-        lock_expiration:
-          description: Additional seconds to extend the lock
-          example: 120
-          minimum: 1
-          type: integer
-      required:
-      - lock_expiration
-      type: object
-    FaultDetail:
-      properties:
-        environment_data:
-          properties:
-            extended_data_records:
-              properties:
-                first_occurrence:
-                  format: date-time
-                  type: string
-                last_occurrence:
-                  format: date-time
-                  type: string
-              type: object
-            snapshots:
-              items:
-                properties:
-                  bulk_data_uri:
-                    type: string
-                  data:
-                    description: Snapshot data
-                  duration_sec:
-                    type: number
-                  format:
-                    type: string
-                  name:
-                    type: string
-                  size_bytes:
-                    type: integer
-                  type:
-                    type: string
-                  x-medkit:
-                    additionalProperties: true
-                    type: object
-                type: object
-              type: array
-          type: object
-        item:
-          properties:
-            code:
-              type: string
-            fault_name:
-              type: string
-            severity:
-              type: integer
-            status:
-              properties:
-                aggregatedStatus:
-                  enum:
-                  - active
-                  - passive
-                  - cleared
-                  type: string
-                confirmedDTC:
-                  type: string
-                pendingDTC:
-                  type: string
-                testFailed:
-                  type: string
-              required:
-              - aggregatedStatus
-              type: object
-          required:
-          - code
-          - severity
-          - status
-          type: object
-        x-medkit:
-          additionalProperties: true
-          properties:
-            occurrence_count:
-              type: integer
-            reporting_sources:
-              items:
-                type: string
-              type: array
-            severity_label:
-              type: string
-            status_raw:
-              type: string
-          type: object
-      required:
-      - item
-      - environment_data
-      type: object
-    FaultList:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/FaultListItem'
-          type: array
-      required:
-      - items
-      type: object
-    FaultListItem:
-      properties:
-        description:
-          type: string
-        fault_code:
-          type: string
-        first_occurred:
-          description: Unix timestamp (seconds with nanosecond fraction)
-          type: number
-        last_occurred:
-          description: Unix timestamp (seconds with nanosecond fraction)
-          type: number
-        occurrence_count:
-          type: integer
-        reporting_sources:
-          items:
-            type: string
-          type: array
-        severity:
-          description: Numeric severity level
-          type: integer
-        severity_label:
-          enum:
-          - INFO
-          - WARN
-          - ERROR
-          - CRITICAL
-          type: string
-        status:
-          type: string
-      required:
-      - fault_code
-      - severity
-      - status
-      type: object
-    GenericError:
-      properties:
-        error_code:
-          type: string
-        message:
-          type: string
-        parameters:
-          type: object
-      required:
-      - error_code
-      - message
-      type: object
-    HealthStatus:
-      properties:
-        discovery:
-          description: Discovery subsystem status
-          properties:
-            linking:
-              properties:
-                binding_conflicts:
-                  items:
-                    type: string
-                  type: array
-                linked_count:
-                  type: integer
-                orphan_count:
-                  type: integer
-                warnings:
-                  items:
-                    type: string
-                  type: array
-              type: object
-            mode:
-              type: string
-            pipeline:
-              type: object
-            strategy:
-              type: string
-          type: object
-        status:
-          type: string
-        timestamp:
-          type: integer
-      required:
-      - status
-      type: object
-    Lock:
-      properties:
-        id:
-          type: string
-        lock_expiration:
-          format: date-time
-          type: string
-        owned:
-          type: boolean
-        scopes:
-          items:
-            type: string
-          type: array
-      required:
-      - id
-      - owned
-      - lock_expiration
-      type: object
-    LockList:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/Lock'
-          type: array
-      required:
-      - items
-      type: object
-    LogConfiguration:
-      properties:
-        max_entries:
-          maximum: 10000
-          minimum: 1
-          type: integer
-        severity_filter:
-          enum:
-          - debug
-          - info
-          - warning
-          - error
-          - fatal
-          type: string
-      type: object
-    LogEntry:
-      properties:
-        context:
-          properties:
-            file:
-              type: string
-            function:
-              type: string
-            line:
-              type: integer
-            node:
-              type: string
-          required:
-          - node
-          type: object
-        id:
-          description: Log entry ID (e.g. log_123)
-          type: string
-        message:
-          type: string
-        severity:
-          type: string
-        timestamp:
-          format: date-time
-          type: string
-      required:
-      - id
-      - timestamp
-      - severity
-      - message
-      type: object
-    LogEntryList:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/LogEntry'
-          type: array
-      required:
-      - items
-      type: object
-    OperationDetail:
-      properties:
-        item:
-          $ref: '#/components/schemas/OperationItem'
-      required:
-      - item
-      type: object
-    OperationExecution:
-      properties:
-        id:
-          type: string
-        progress:
-          type: number
-        result:
-          type: object
         status:
           enum:
           - pending
@@ -581,91 +898,883 @@ components:
       - id
       - status
       type: object
-    OperationExecutionList:
+    ExecutionCreateRequest:
       properties:
+        goal:
+          anyOf:
+          - {}
+          - type: 'null'
+        parameters:
+          anyOf:
+          - {}
+          - type: 'null'
+        request:
+          anyOf:
+          - {}
+          - type: 'null'
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    ExecutionId:
+      properties:
+        id:
+          type: string
+      required:
+      - id
+      type: object
+    ExecutionUpdateRequest:
+      properties:
+        capability:
+          type: string
+      required:
+      - capability
+      type: object
+    ExtendLockRequest:
+      properties:
+        lock_expiration:
+          type: integer
+      required:
+      - lock_expiration
+      type: object
+    FaultClearResult:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
+    FaultDetail:
+      properties:
+        environment_data:
+          $ref: '#/components/schemas/FaultEnvironmentData'
+        item:
+          $ref: '#/components/schemas/FaultItem'
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/FaultXMedkit'
+          - type: 'null'
+      required:
+      - item
+      - environment_data
+      type: object
+    FaultDetailResult:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
+    FaultEnvironmentData:
+      properties:
+        extended_data_records:
+          anyOf:
+          - {}
+          - type: 'null'
+        snapshots:
+          anyOf:
+          - {}
+          - type: 'null'
+      type: object
+    FaultItem:
+      properties:
+        code:
+          type: string
+        fault_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+        severity:
+          type: integer
+        status:
+          $ref: '#/components/schemas/FaultStatus'
+      required:
+      - code
+      - severity
+      - status
+      type: object
+    FaultList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
         items:
           items:
-            $ref: '#/components/schemas/OperationExecution'
+            $ref: '#/components/schemas/FaultListItem'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
       required:
       - items
       type: object
+    FaultListAggXMedkit:
+      properties:
+        aggregated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        aggregation_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+        aggregation_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        app_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        component_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        count:
+          type: integer
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        failed_peers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        host_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        partial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        peer_dropped_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DroppedItem'
+            type: array
+          - type: 'null'
+      required:
+      - count
+      type: object
+    FaultListItem:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        fault_code:
+          type: string
+        first_occurred:
+          anyOf:
+          - type: number
+          - type: 'null'
+        last_occurred:
+          anyOf:
+          - type: number
+          - type: 'null'
+        occurrence_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        reporting_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        severity:
+          type: integer
+        severity_label:
+          anyOf:
+          - enum:
+            - INFO
+            - WARN
+            - ERROR
+            - CRITICAL
+            - UNKNOWN
+            type: string
+          - type: 'null'
+        status:
+          type: string
+      required:
+      - fault_code
+      - severity
+      - status
+      type: object
+    FaultListResult:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
+    FaultListXMedkit:
+      properties:
+        cluster_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        clusters:
+          anyOf:
+          - {}
+          - type: 'null'
+        count:
+          type: integer
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        failed_peers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        muted_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        muted_faults:
+          anyOf:
+          - {}
+          - type: 'null'
+        partial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        peer_dropped_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DroppedItem'
+            type: array
+          - type: 'null'
+        source_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+      required:
+      - count
+      type: object
+    FaultStatus:
+      properties:
+        aggregatedStatus:
+          enum:
+          - active
+          - passive
+          - cleared
+          type: string
+        confirmedDTC:
+          anyOf:
+          - type: string
+          - type: 'null'
+        pendingDTC:
+          anyOf:
+          - type: string
+          - type: 'null'
+        testFailed:
+          anyOf:
+          - type: string
+          - type: 'null'
+      required:
+      - aggregatedStatus
+      type: object
+    FaultXMedkit:
+      properties:
+        occurrence_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        reporting_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        severity_label:
+          anyOf:
+          - type: string
+          - type: 'null'
+        status_raw:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    FunctionDetail:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        bulk-data:
+          type: string
+        capabilities:
+          anyOf:
+          - {}
+          - type: 'null'
+        configurations:
+          type: string
+        cyclic-subscriptions:
+          type: string
+        data:
+          type: string
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        faults:
+          type: string
+        hosts:
+          type: string
+        id:
+          type: string
+        logs:
+          type: string
+        name:
+          type: string
+        operations:
+          type: string
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        translation_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        triggers:
+          type: string
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitFunction'
+          - type: 'null'
+        x-medkit-graph:
+          type: string
+      required:
+      - id
+      - name
+      - type
+      - hosts
+      - data
+      - operations
+      - configurations
+      - faults
+      - logs
+      - bulk-data
+      - x-medkit-graph
+      - cyclic-subscriptions
+      - triggers
+      type: object
+    FunctionList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/FunctionListItem'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
+      required:
+      - items
+      type: object
+    FunctionListItem:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        href:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        type:
+          enum:
+          - area
+          - component
+          - app
+          - function
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitFunction'
+          - type: 'null'
+      required:
+      - id
+      - name
+      - href
+      - type
+      type: object
+    GenericError:
+      properties:
+        error_code:
+          type: string
+        message:
+          type: string
+        parameters:
+          anyOf:
+          - {}
+          - type: 'null'
+      required:
+      - error_code
+      - message
+      type: object
+    HateoasLinks:
+      properties:
+        parent:
+          anyOf:
+          - type: string
+          - type: 'null'
+        self:
+          type: string
+      required:
+      - self
+      type: object
+    HealthAggregationWarning:
+      properties:
+        code:
+          type: string
+        entity_ids:
+          items:
+            type: string
+          type: array
+        message:
+          type: string
+        peer_names:
+          items:
+            type: string
+          type: array
+      required:
+      - code
+      - message
+      - entity_ids
+      - peer_names
+      type: object
+    HealthDiscovery:
+      properties:
+        linking:
+          anyOf:
+          - $ref: '#/components/schemas/HealthDiscoveryLinking'
+          - type: 'null'
+        mode:
+          type: string
+        pipeline:
+          anyOf:
+          - {}
+          - type: 'null'
+        strategy:
+          type: string
+      required:
+      - mode
+      - strategy
+      type: object
+    HealthDiscoveryLinking:
+      properties:
+        binding_conflicts:
+          type: integer
+        linked_count:
+          type: integer
+        orphan_count:
+          type: integer
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+      required:
+      - linked_count
+      - orphan_count
+      - binding_conflicts
+      type: object
+    HealthStatus:
+      properties:
+        discovery:
+          anyOf:
+          - $ref: '#/components/schemas/HealthDiscovery'
+          - type: 'null'
+        peers:
+          anyOf:
+          - {}
+          - type: 'null'
+        status:
+          type: string
+        timestamp:
+          type: integer
+        warning_schema_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        warnings:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/HealthAggregationWarning'
+            type: array
+          - type: 'null'
+        x-medkit-data-provider:
+          anyOf:
+          - {}
+          - type: 'null'
+        x-medkit-subscription-executor:
+          anyOf:
+          - {}
+          - type: 'null'
+      required:
+      - status
+      - timestamp
+      type: object
+    Lock:
+      properties:
+        id:
+          type: string
+        lock_expiration:
+          type: string
+        owned:
+          type: boolean
+        scopes:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+      required:
+      - id
+      - owned
+      - lock_expiration
+      type: object
+    LockList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/Lock'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
+      required:
+      - items
+      type: object
+    LogConfiguration:
+      properties:
+        max_entries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        severity_filter:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    LogContext:
+      properties:
+        file:
+          anyOf:
+          - type: string
+          - type: 'null'
+        function:
+          anyOf:
+          - type: string
+          - type: 'null'
+        line:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        node:
+          type: string
+      required:
+      - node
+      type: object
+    LogEntry:
+      properties:
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/LogContext'
+          - type: 'null'
+        id:
+          type: string
+        message:
+          type: string
+        severity:
+          type: string
+        timestamp:
+          type: string
+      required:
+      - id
+      - timestamp
+      - severity
+      - message
+      type: object
+    LogEntryList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/LogEntry'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/LogListXMedkit'
+          - type: 'null'
+      required:
+      - items
+      type: object
+    LogListXMedkit:
+      properties:
+        aggregated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        aggregation_level:
+          anyOf:
+          - enum:
+            - function
+            - area
+            - component
+            type: string
+          - type: 'null'
+        aggregation_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        app_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        component_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        contributors:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        failed_peers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        host_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        partial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        peer_dropped_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DroppedItem'
+            type: array
+          - type: 'null'
+      type: object
+    OperationDetail:
+      properties:
+        item:
+          $ref: '#/components/schemas/OperationItem'
+      required:
+      - item
+      type: object
+    OperationExecution:
+      properties:
+        capability:
+          anyOf:
+          - type: string
+          - type: 'null'
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        parameters:
+          anyOf:
+          - {}
+          - type: 'null'
+        status:
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+          type: string
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitOperationExecution'
+          - type: 'null'
+      required:
+      - status
+      type: object
+    OperationExecutionList:
+      properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/ExecutionId'
+          type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
+      required:
+      - items
+      type: object
+    OperationExecutionResult:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
     OperationItem:
       properties:
         asynchronous_execution:
-          description: Whether operation runs asynchronously
           type: boolean
         id:
           type: string
         name:
           type: string
         proximity_proof_required:
-          description: Whether proximity proof is needed
           type: boolean
         x-medkit:
-          additionalProperties: true
-          type: object
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitOperationItem'
+          - type: 'null'
       required:
       - id
       - name
+      - proximity_proof_required
+      - asynchronous_execution
       type: object
-    OperationItemList:
+    OperationList:
       properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
         items:
           items:
             $ref: '#/components/schemas/OperationItem'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
       required:
       - items
+      type: object
+    RootAuth:
+      properties:
+        algorithm:
+          type: string
+        enabled:
+          type: boolean
+        require_auth_for:
+          type: string
+      required:
+      - enabled
+      - algorithm
+      - require_auth_for
+      type: object
+    RootCapabilities:
+      properties:
+        aggregation:
+          type: boolean
+        async_actions:
+          type: boolean
+        authentication:
+          type: boolean
+        bulk_data:
+          type: boolean
+        configurations:
+          type: boolean
+        cyclic_subscriptions:
+          type: boolean
+        data_access:
+          type: boolean
+        discovery:
+          type: boolean
+        faults:
+          type: boolean
+        locking:
+          type: boolean
+        logs:
+          type: boolean
+        operations:
+          type: boolean
+        scripts:
+          type: boolean
+        tls:
+          type: boolean
+        triggers:
+          type: boolean
+        updates:
+          type: boolean
+        vendor_extensions:
+          type: boolean
+      required:
+      - discovery
+      - data_access
+      - operations
+      - async_actions
+      - configurations
+      - faults
+      - logs
+      - bulk_data
+      - cyclic_subscriptions
+      - locking
+      - triggers
+      - updates
+      - authentication
+      - tls
+      - scripts
+      - aggregation
+      - vendor_extensions
       type: object
     RootOverview:
       properties:
         api_base:
           type: string
         auth:
-          properties:
-            algorithm:
-              type: string
-            enabled:
-              type: boolean
-            require_auth_for:
-              type: string
-          type: object
+          anyOf:
+          - $ref: '#/components/schemas/RootAuth'
+          - type: 'null'
         capabilities:
-          properties:
-            async_actions:
-              type: boolean
-            authentication:
-              type: boolean
-            bulk_data:
-              type: boolean
-            configurations:
-              type: boolean
-            cyclic_subscriptions:
-              type: boolean
-            data_access:
-              type: boolean
-            discovery:
-              type: boolean
-            faults:
-              type: boolean
-            locking:
-              type: boolean
-            logs:
-              type: boolean
-            operations:
-              type: boolean
-            scripts:
-              type: boolean
-            tls:
-              type: boolean
-            triggers:
-              type: boolean
-            updates:
-              type: boolean
-            vendor_extensions:
-              type: boolean
-          type: object
+          $ref: '#/components/schemas/RootCapabilities'
         endpoints:
           items:
             type: string
@@ -673,12 +1782,9 @@ components:
         name:
           type: string
         tls:
-          properties:
-            enabled:
-              type: boolean
-            min_version:
-              type: string
-          type: object
+          anyOf:
+          - $ref: '#/components/schemas/RootTls'
+          - type: 'null'
         version:
           type: string
       required:
@@ -688,13 +1794,19 @@ components:
       - endpoints
       - capabilities
       type: object
+    RootTls:
+      properties:
+        enabled:
+          type: boolean
+        min_version:
+          type: string
+      required:
+      - enabled
+      - min_version
+      type: object
     ScriptControlRequest:
       properties:
         action:
-          description: Control action for the running script execution
-          enum:
-          - stop
-          - forced_termination
           type: string
       required:
       - action
@@ -702,51 +1814,90 @@ components:
     ScriptExecution:
       properties:
         completed_at:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         error:
-          type: object
+          anyOf:
+          - {}
+          - type: 'null'
         id:
           type: string
         parameters:
-          type: object
+          anyOf:
+          - {}
+          - type: 'null'
         progress:
-          type: number
+          anyOf:
+          - type: integer
+          - type: 'null'
         started_at:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         status:
           type: string
       required:
       - id
       - status
       type: object
+    ScriptList:
+      properties:
+        _links:
+          anyOf:
+          - $ref: '#/components/schemas/HateoasLinks'
+          - type: 'null'
+        items:
+          items:
+            $ref: '#/components/schemas/ScriptMetadata'
+          type: array
+      required:
+      - items
+      type: object
     ScriptMetadata:
       properties:
         description:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         href:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         id:
           type: string
         managed:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
         name:
           type: string
         parameters_schema:
-          type:
-          - object
-          - 'null'
+          anyOf:
+          - {}
+          - type: 'null'
         proximity_proof_required:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
       required:
       - id
       - name
       type: object
     ScriptMetadataList:
       properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
         items:
           items:
             $ref: '#/components/schemas/ScriptMetadata'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
       required:
       - items
       type: object
@@ -763,43 +1914,35 @@ components:
     Trigger:
       properties:
         event_source:
-          description: Server-generated event source URI
           type: string
         id:
           type: string
         lifetime:
-          description: Trigger lifetime in seconds
-          type: number
+          anyOf:
+          - type: integer
+          - type: 'null'
         log_settings:
-          type: object
+          anyOf:
+          - {}
+          - type: 'null'
         multishot:
-          description: Whether trigger fires multiple times
           type: boolean
         observed_resource:
-          description: Resource URI being observed
           type: string
         path:
-          description: Notification delivery path
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         persistent:
-          description: Whether trigger survives server restarts
           type: boolean
         protocol:
-          description: Transport protocol
           type: string
         status:
           enum:
           - active
           - terminated
           type: string
-        trigger_condition:
-          additionalProperties: true
-          properties:
-            condition_type:
-              type: string
-          required:
-          - condition_type
-          type: object
+        trigger_condition: {}
       required:
       - id
       - status
@@ -807,56 +1950,70 @@ components:
       - event_source
       - protocol
       - trigger_condition
+      - multishot
+      - persistent
       type: object
     TriggerCreateRequest:
       properties:
         lifetime:
-          minimum: 1
-          type: integer
+          anyOf:
+          - type: integer
+          - type: 'null'
         log_settings:
-          type: object
+          anyOf:
+          - {}
+          - type: 'null'
         multishot:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
         path:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         persistent:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
         protocol:
-          description: 'Transport protocol (default: sse)'
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         resource:
-          description: Resource URI to observe
           type: string
-        trigger_condition:
-          additionalProperties: true
-          properties:
-            condition_type:
-              type: string
-          required:
-          - condition_type
-          type: object
+        trigger_condition: {}
       required:
       - resource
       - trigger_condition
       type: object
     TriggerList:
       properties:
+        _links:
+          anyOf:
+          - {}
+          - type: 'null'
         items:
           items:
             $ref: '#/components/schemas/Trigger'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitCollection'
+          - type: 'null'
       required:
       - items
       type: object
     TriggerUpdateRequest:
       properties:
         lifetime:
-          description: New lifetime in seconds
-          minimum: 1
           type: integer
       required:
       - lifetime
       type: object
+    UpdateDetail:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
     UpdateList:
       properties:
         items:
@@ -866,12 +2023,27 @@ components:
       required:
       - items
       type: object
+    UpdateRegisterRequest:
+      additionalProperties: true
+      type: object
+      x-medkit-opaque: true
+    UpdateRegisterResponse:
+      properties:
+        id:
+          type: string
+      required:
+      - id
+      type: object
     UpdateStatus:
       properties:
         error:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
         progress:
-          type: number
+          anyOf:
+          - type: integer
+          - type: 'null'
         status:
           enum:
           - pending
@@ -880,46 +2052,356 @@ components:
           - failed
           type: string
         sub_progress:
-          items:
-            properties:
-              name:
-                type: string
-              progress:
-                type: number
-            required:
-            - name
-            - progress
-            type: object
-          type: array
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/UpdateSubProgress'
+            type: array
+          - type: 'null'
+        x-medkit:
+          $ref: '#/components/schemas/XMedkitUpdate'
       required:
       - status
+      - x-medkit
+      type: object
+    UpdateSubProgress:
+      properties:
+        name:
+          type: string
+        progress:
+          type: integer
+      required:
+      - name
+      - progress
       type: object
     VersionInfo:
       properties:
         items:
           items:
-            properties:
-              base_uri:
-                type: string
-              vendor_info:
-                properties:
-                  name:
-                    type: string
-                  version:
-                    type: string
-                required:
-                - version
-                - name
-                type: object
-              version:
-                type: string
-            required:
-            - version
-            - base_uri
-            type: object
+            $ref: '#/components/schemas/VersionInfoEntry'
           type: array
+        x-medkit:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitVersionInfo'
+          - type: 'null'
       required:
       - items
+      type: object
+    VersionInfoEntry:
+      properties:
+        base_uri:
+          type: string
+        vendor_info:
+          anyOf:
+          - $ref: '#/components/schemas/VersionInfoVendor'
+          - type: 'null'
+        version:
+          type: string
+      required:
+      - version
+      - base_uri
+      type: object
+    VersionInfoVendor:
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+      required:
+      - version
+      - name
+      type: object
+    XMedkitApp:
+      properties:
+        component_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        contributors:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        is_online:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        missing:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    XMedkitArea:
+      properties:
+        contributors:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        missing:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        parent_area_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        unresolved_component:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    XMedkitCollection:
+      properties:
+        contributors:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        failed_peers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        partial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        peer_dropped_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DroppedItem'
+            type: array
+          - type: 'null'
+        total_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+      type: object
+    XMedkitComponent:
+      properties:
+        area:
+          anyOf:
+          - type: string
+          - type: 'null'
+        capabilities:
+          anyOf:
+          - {}
+          - type: 'null'
+        contributors:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        dependsOn:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        missing:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        parentComponentId:
+          anyOf:
+          - type: string
+          - type: 'null'
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+        variant:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    XMedkitDataItem:
+      properties:
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        publisher_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        publisher_created:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        status:
+          anyOf:
+          - {}
+          - type: 'null'
+        subscriber_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        timestamp:
+          anyOf:
+          - type: integer
+          - type: 'null'
+        type_info:
+          anyOf:
+          - {}
+          - type: 'null'
+      type: object
+    XMedkitFunction:
+      properties:
+        contributors:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+        hosts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    XMedkitOperationExecution:
+      properties:
+        goal_id:
+          type: string
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        ros2_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+      required:
+      - goal_id
+      type: object
+    XMedkitOperationItem:
+      properties:
+        entity_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        ros2:
+          anyOf:
+          - $ref: '#/components/schemas/XMedkitRos2'
+          - type: 'null'
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+        type_info:
+          anyOf:
+          - {}
+          - type: 'null'
+      type: object
+    XMedkitRos2:
+      properties:
+        action:
+          anyOf:
+          - type: string
+          - type: 'null'
+        direction:
+          anyOf:
+          - type: string
+          - type: 'null'
+        kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+        namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+        node:
+          anyOf:
+          - type: string
+          - type: 'null'
+        service:
+          anyOf:
+          - type: string
+          - type: 'null'
+        topic:
+          anyOf:
+          - type: string
+          - type: 'null'
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+      type: object
+    XMedkitUpdate:
+      properties:
+        phase:
+          enum:
+          - none
+          - preparing
+          - prepared
+          - executing
+          - executed
+          - failed
+          - deleting
+          type: string
+      required:
+      - phase
+      type: object
+    XMedkitVersionInfo:
+      properties:
+        failed_peers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+        partial:
+          anyOf:
+          - type: boolean
+          - type: 'null'
       type: object
 info:
   contact:
@@ -928,7 +2410,7 @@ info:
   description: SOVD-compatible REST API for ROS 2 diagnostics and control. See https://selfpatch.github.io/ros2_medkit/
     for documentation.
   title: ROS 2 Medkit Gateway
-  version: 0.4.0
+  version: 0.5.0
   x-sovd-version: 1.0.0
 openapi: 3.1.0
 paths:
@@ -942,7 +2424,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RootOverview'
-          description: API metadata
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -961,8 +2443,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: App list
+                $ref: '#/components/schemas/AppList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -988,8 +2470,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityDetail'
-          description: Entity details with capabilities
+                $ref: '#/components/schemas/AppDetail'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -997,6 +2479,34 @@ paths:
         '500':
           $ref: '#/components/responses/GenericError'
       summary: Get app details
+      tags:
+      - Discovery
+  /apps/{app_id}/belongs-to:
+    get:
+      description: Returns the area this app belongs to via its parent component,
+        as a 0-or-1 element collection.
+      operationId: getAppArea
+      parameters:
+      - description: The app identifier
+        in: path
+        name: app_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AreaList'
+          description: ''
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Get app parent area
       tags:
       - Discovery
   /apps/{app_id}/bulk-data:
@@ -1016,7 +2526,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1049,7 +2559,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataDescriptorList'
-          description: Descriptor list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1079,11 +2589,17 @@ paths:
         content:
           multipart/form-data:
             schema:
-              format: binary
-              type: string
-        description: File to upload
+              additionalProperties: true
+              type: object
+        description: Multipart upload
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkDataDescriptor'
+          description: ''
         '201':
           content:
             application/json:
@@ -1124,7 +2640,7 @@ paths:
           type: string
       responses:
         '204':
-          description: File deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1163,7 +2679,7 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File content
+          description: Binary download
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1186,13 +2702,13 @@ paths:
           type: string
       responses:
         '204':
-          description: All configurations deleted
+          description: No content
         '207':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationDeleteMultiStatus'
-          description: Partial success - some nodes failed
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1217,8 +2733,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConfigurationMetaDataList'
-          description: Configuration list
+                $ref: '#/components/schemas/ConfigurationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1247,7 +2763,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Configuration deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1279,7 +2795,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Configuration parameter
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1309,8 +2825,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ConfigurationWriteValue'
-        description: Configuration value
+              $ref: '#/components/schemas/ConfigurationWriteRequest'
+        description: ''
         required: true
       responses:
         '200':
@@ -1318,7 +2834,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Updated configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1345,7 +2861,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscriptionList'
-          description: Subscription list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1370,9 +2886,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CyclicSubscriptionCreateRequest'
-        description: Subscription configuration
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CyclicSubscription'
+          description: ''
         '201':
           content:
             application/json:
@@ -1407,7 +2929,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Subscription deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1439,7 +2961,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscription'
-          description: Subscription details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1469,8 +2991,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CyclicSubscription'
-        description: Subscription update
+              $ref: '#/components/schemas/CyclicSubscriptionUpdateRequest'
+        description: ''
         required: true
       responses:
         '200':
@@ -1478,7 +3000,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscription'
-          description: Updated subscription
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1507,7 +3029,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1533,8 +3055,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataItemList'
-          description: Data item list
+                $ref: '#/components/schemas/DataListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1560,8 +3082,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1587,15 +3109,8 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  items:
-                    items:
-                      type: object
-                    type: array
-                required:
-                - items
-                type: object
-          description: Group list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1627,8 +3142,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Data value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1666,8 +3181,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Written value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1693,8 +3208,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Dependency list
+                $ref: '#/components/schemas/AppList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1717,7 +3232,7 @@ paths:
           type: string
       responses:
         '204':
-          description: All faults cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1742,8 +3257,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultList'
-          description: Fault list
+                $ref: '#/components/schemas/FaultListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1771,8 +3286,14 @@ paths:
         schema:
           type: string
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaultClearResult'
+          description: ''
         '204':
-          description: Fault cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1804,8 +3325,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultDetail'
-          description: Fault detail
+                $ref: '#/components/schemas/FaultDetailResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1817,7 +3338,7 @@ paths:
       - Faults
   /apps/{app_id}/is-located-on:
     get:
-      description: Returns the component hosting this app.
+      description: Returns the component hosting this app as a single-element collection.
       operationId: getAppHost
       parameters:
       - description: The app identifier
@@ -1831,8 +3352,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityDetail'
-          description: Host component
+                $ref: '#/components/schemas/ComponentList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1868,7 +3389,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LockList'
-          description: Lock list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1901,9 +3422,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AcquireLockRequest'
-        description: Lock parameters
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lock'
+          description: ''
         '201':
           content:
             application/json:
@@ -1946,7 +3473,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Lock released
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -1987,7 +3514,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Lock'
-          description: Lock details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2026,11 +3553,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExtendLockRequest'
-        description: Lock extension
+        description: ''
         required: true
       responses:
         '204':
-          description: Lock extended
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2057,7 +3584,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogEntryList'
-          description: Log entries
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2084,7 +3611,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogConfiguration'
-          description: Log configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2109,11 +3636,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LogConfiguration'
-        description: Log configuration
+        description: ''
         required: true
       responses:
         '204':
-          description: Configuration updated
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2139,8 +3666,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationItemList'
-          description: Operation list
+                $ref: '#/components/schemas/OperationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2174,7 +3701,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationDetail'
-          description: Operation details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2207,7 +3734,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecutionList'
-          description: Execution list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2238,22 +3765,22 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-        description: Operation parameters
+              $ref: '#/components/schemas/ExecutionCreateRequest'
+        description: ''
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-          description: Synchronous result
+                $ref: '#/components/schemas/OperationExecutionResult'
+          description: ''
         '202':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationExecution'
-          description: Asynchronous execution started
+                $ref: '#/components/schemas/ExecutionCreateAsync'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2288,7 +3815,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Execution cancelled
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2326,7 +3853,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Execution status
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2363,7 +3890,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExecutionUpdateRequest'
-        description: Execution control
+        description: ''
         required: true
       responses:
         '200':
@@ -2371,7 +3898,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Updated execution
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationExecution'
+          description: Accepted (asynchronous control)
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2397,8 +3930,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScriptMetadataList'
-          description: Script list
+                $ref: '#/components/schemas/ScriptList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2422,11 +3955,17 @@ paths:
         content:
           multipart/form-data:
             schema:
-              format: binary
-              type: string
-        description: Script file
+              additionalProperties: true
+              type: object
+        description: Multipart upload
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptUploadResponse'
+          description: ''
         '201':
           content:
             application/json:
@@ -2461,7 +4000,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Script deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2493,7 +4032,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScriptMetadata'
-          description: Script metadata
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2528,6 +4067,12 @@ paths:
         description: Execution parameters
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptExecution'
+          description: ''
         '202':
           content:
             application/json:
@@ -2568,7 +4113,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Execution removed
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2606,7 +4151,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScriptExecution'
-          description: Execution status
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2643,7 +4188,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ScriptControlRequest'
-        description: Execution control
+        description: ''
         required: true
       responses:
         '200':
@@ -2651,7 +4196,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScriptExecution'
-          description: Execution updated
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2678,7 +4223,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TriggerList'
-          description: Trigger list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2703,9 +4248,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerCreateRequest'
-        description: Trigger configuration
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trigger'
+          description: ''
         '201':
           content:
             application/json:
@@ -2740,7 +4291,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Trigger deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2772,7 +4323,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Trigger details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2803,7 +4354,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerUpdateRequest'
-        description: Trigger update
+        description: ''
         required: true
       responses:
         '200':
@@ -2811,7 +4362,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Updated trigger
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2840,7 +4391,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2859,8 +4410,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Area list
+                $ref: '#/components/schemas/AreaList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2887,8 +4438,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityDetail'
-          description: Entity details with capabilities
+                $ref: '#/components/schemas/AreaDetail'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2915,7 +4466,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2948,7 +4499,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataDescriptorList'
-          description: Descriptor list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -2988,7 +4539,7 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File content
+          description: Binary download
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3014,8 +4565,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Component list
+                $ref: '#/components/schemas/ComponentList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3038,13 +4589,13 @@ paths:
           type: string
       responses:
         '204':
-          description: All configurations deleted
+          description: No content
         '207':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationDeleteMultiStatus'
-          description: Partial success - some nodes failed
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3069,8 +4620,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConfigurationMetaDataList'
-          description: Configuration list
+                $ref: '#/components/schemas/ConfigurationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3099,7 +4650,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Configuration deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3131,7 +4682,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Configuration parameter
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3161,8 +4712,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ConfigurationWriteValue'
-        description: Configuration value
+              $ref: '#/components/schemas/ConfigurationWriteRequest'
+        description: ''
         required: true
       responses:
         '200':
@@ -3170,7 +4721,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Updated configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3196,8 +4747,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Contained entities
+                $ref: '#/components/schemas/ComponentList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3223,8 +4774,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataItemList'
-          description: Data item list
+                $ref: '#/components/schemas/DataListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3250,8 +4801,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3277,15 +4828,8 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  items:
-                    items:
-                      type: object
-                    type: array
-                required:
-                - items
-                type: object
-          description: Group list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3317,8 +4861,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Data value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3356,8 +4900,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Written value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3380,7 +4924,7 @@ paths:
           type: string
       responses:
         '204':
-          description: All faults cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3405,8 +4949,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultList'
-          description: Fault list
+                $ref: '#/components/schemas/FaultListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3434,8 +4978,14 @@ paths:
         schema:
           type: string
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaultClearResult'
+          description: ''
         '204':
-          description: Fault cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3467,8 +5017,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultDetail'
-          description: Fault detail
+                $ref: '#/components/schemas/FaultDetailResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3495,7 +5045,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogEntryList'
-          description: Log entries
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3522,7 +5072,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogConfiguration'
-          description: Log configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3547,11 +5097,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LogConfiguration'
-        description: Log configuration
+        description: ''
         required: true
       responses:
         '204':
-          description: Configuration updated
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3577,8 +5127,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationItemList'
-          description: Operation list
+                $ref: '#/components/schemas/OperationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3612,7 +5162,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationDetail'
-          description: Operation details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3645,7 +5195,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecutionList'
-          description: Execution list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3676,22 +5226,22 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-        description: Operation parameters
+              $ref: '#/components/schemas/ExecutionCreateRequest'
+        description: ''
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-          description: Synchronous result
+                $ref: '#/components/schemas/OperationExecutionResult'
+          description: ''
         '202':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationExecution'
-          description: Asynchronous execution started
+                $ref: '#/components/schemas/ExecutionCreateAsync'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3726,7 +5276,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Execution cancelled
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3764,7 +5314,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Execution status
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3801,7 +5351,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExecutionUpdateRequest'
-        description: Execution control
+        description: ''
         required: true
       responses:
         '200':
@@ -3809,7 +5359,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Updated execution
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationExecution'
+          description: Accepted (asynchronous control)
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3835,8 +5391,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Subarea list
+                $ref: '#/components/schemas/AreaList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3869,7 +5425,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3908,7 +5464,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataDescriptorList'
-          description: Descriptor list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3954,7 +5510,7 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File content
+          description: Binary download
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -3981,7 +5537,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TriggerList'
-          description: Trigger list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4006,9 +5562,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerCreateRequest'
-        description: Trigger configuration
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trigger'
+          description: ''
         '201':
           content:
             application/json:
@@ -4043,7 +5605,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Trigger deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4075,7 +5637,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Trigger details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4106,7 +5668,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerUpdateRequest'
-        description: Trigger update
+        description: ''
         required: true
       responses:
         '200':
@@ -4114,7 +5676,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Updated trigger
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4143,7 +5705,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4170,7 +5732,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthTokenResponse'
-          description: Authorization tokens
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4188,7 +5750,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/AuthRevokeRequest'
         description: Token to revoke
         required: true
       responses:
@@ -4196,8 +5758,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Token revoked
+                $ref: '#/components/schemas/AuthRevokeResponse'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4224,7 +5786,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthTokenResponse'
-          description: Access token
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4243,8 +5805,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Component list
+                $ref: '#/components/schemas/ComponentList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4271,8 +5833,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityDetail'
-          description: Entity details with capabilities
+                $ref: '#/components/schemas/ComponentDetail'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4299,7 +5861,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4332,7 +5894,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataDescriptorList'
-          description: Descriptor list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4362,11 +5924,17 @@ paths:
         content:
           multipart/form-data:
             schema:
-              format: binary
-              type: string
-        description: File to upload
+              additionalProperties: true
+              type: object
+        description: Multipart upload
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkDataDescriptor'
+          description: ''
         '201':
           content:
             application/json:
@@ -4407,7 +5975,7 @@ paths:
           type: string
       responses:
         '204':
-          description: File deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4446,7 +6014,7 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File content
+          description: Binary download
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4469,13 +6037,13 @@ paths:
           type: string
       responses:
         '204':
-          description: All configurations deleted
+          description: No content
         '207':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationDeleteMultiStatus'
-          description: Partial success - some nodes failed
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4500,8 +6068,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConfigurationMetaDataList'
-          description: Configuration list
+                $ref: '#/components/schemas/ConfigurationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4530,7 +6098,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Configuration deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4562,7 +6130,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Configuration parameter
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4592,8 +6160,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ConfigurationWriteValue'
-        description: Configuration value
+              $ref: '#/components/schemas/ConfigurationWriteRequest'
+        description: ''
         required: true
       responses:
         '200':
@@ -4601,7 +6169,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Updated configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4628,7 +6196,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscriptionList'
-          description: Subscription list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4653,9 +6221,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CyclicSubscriptionCreateRequest'
-        description: Subscription configuration
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CyclicSubscription'
+          description: ''
         '201':
           content:
             application/json:
@@ -4690,7 +6264,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Subscription deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4722,7 +6296,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscription'
-          description: Subscription details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4752,8 +6326,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CyclicSubscription'
-        description: Subscription update
+              $ref: '#/components/schemas/CyclicSubscriptionUpdateRequest'
+        description: ''
         required: true
       responses:
         '200':
@@ -4761,7 +6335,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscription'
-          description: Updated subscription
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4790,7 +6364,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4816,8 +6390,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataItemList'
-          description: Data item list
+                $ref: '#/components/schemas/DataListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4843,8 +6417,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4870,15 +6444,8 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  items:
-                    items:
-                      type: object
-                    type: array
-                required:
-                - items
-                type: object
-          description: Group list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4910,8 +6477,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Data value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4949,8 +6516,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Written value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -4976,8 +6543,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Dependency list
+                $ref: '#/components/schemas/ComponentList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5000,7 +6567,7 @@ paths:
           type: string
       responses:
         '204':
-          description: All faults cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5025,8 +6592,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultList'
-          description: Fault list
+                $ref: '#/components/schemas/FaultListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5054,8 +6621,14 @@ paths:
         schema:
           type: string
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaultClearResult'
+          description: ''
         '204':
-          description: Fault cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5087,8 +6660,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultDetail'
-          description: Fault detail
+                $ref: '#/components/schemas/FaultDetailResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5114,8 +6687,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Host list
+                $ref: '#/components/schemas/AppList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5151,7 +6724,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LockList'
-          description: Lock list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5184,9 +6757,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AcquireLockRequest'
-        description: Lock parameters
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lock'
+          description: ''
         '201':
           content:
             application/json:
@@ -5229,7 +6808,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Lock released
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5270,7 +6849,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Lock'
-          description: Lock details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5309,11 +6888,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExtendLockRequest'
-        description: Lock extension
+        description: ''
         required: true
       responses:
         '204':
-          description: Lock extended
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5340,7 +6919,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogEntryList'
-          description: Log entries
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5367,7 +6946,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogConfiguration'
-          description: Log configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5392,11 +6971,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LogConfiguration'
-        description: Log configuration
+        description: ''
         required: true
       responses:
         '204':
-          description: Configuration updated
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5422,8 +7001,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationItemList'
-          description: Operation list
+                $ref: '#/components/schemas/OperationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5457,7 +7036,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationDetail'
-          description: Operation details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5490,7 +7069,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecutionList'
-          description: Execution list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5521,22 +7100,22 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-        description: Operation parameters
+              $ref: '#/components/schemas/ExecutionCreateRequest'
+        description: ''
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-          description: Synchronous result
+                $ref: '#/components/schemas/OperationExecutionResult'
+          description: ''
         '202':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationExecution'
-          description: Asynchronous execution started
+                $ref: '#/components/schemas/ExecutionCreateAsync'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5571,7 +7150,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Execution cancelled
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5609,7 +7188,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Execution status
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5646,7 +7225,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExecutionUpdateRequest'
-        description: Execution control
+        description: ''
         required: true
       responses:
         '200':
@@ -5654,7 +7233,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Updated execution
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationExecution'
+          description: Accepted (asynchronous control)
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5680,8 +7265,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScriptMetadataList'
-          description: Script list
+                $ref: '#/components/schemas/ScriptList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5705,11 +7290,17 @@ paths:
         content:
           multipart/form-data:
             schema:
-              format: binary
-              type: string
-        description: Script file
+              additionalProperties: true
+              type: object
+        description: Multipart upload
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptUploadResponse'
+          description: ''
         '201':
           content:
             application/json:
@@ -5744,7 +7335,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Script deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5776,7 +7367,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScriptMetadata'
-          description: Script metadata
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5811,6 +7402,12 @@ paths:
         description: Execution parameters
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptExecution'
+          description: ''
         '202':
           content:
             application/json:
@@ -5851,7 +7448,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Execution removed
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5889,7 +7486,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScriptExecution'
-          description: Execution status
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5926,7 +7523,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ScriptControlRequest'
-        description: Execution control
+        description: ''
         required: true
       responses:
         '200':
@@ -5934,7 +7531,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScriptExecution'
-          description: Execution updated
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5960,8 +7557,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Subcomponent list
+                $ref: '#/components/schemas/ComponentList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -5994,7 +7591,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6033,7 +7630,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataDescriptorList'
-          description: Descriptor list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6079,7 +7676,7 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File content
+          description: Binary download
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6106,7 +7703,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TriggerList'
-          description: Trigger list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6131,9 +7728,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerCreateRequest'
-        description: Trigger configuration
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trigger'
+          description: ''
         '201':
           content:
             application/json:
@@ -6168,7 +7771,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Trigger deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6200,7 +7803,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Trigger details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6231,7 +7834,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerUpdateRequest'
-        description: Trigger update
+        description: ''
         required: true
       responses:
         '200':
@@ -6239,7 +7842,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Updated trigger
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6268,7 +7871,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6284,7 +7887,7 @@ paths:
       operationId: clearAllFaults
       responses:
         '204':
-          description: All faults cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6302,8 +7905,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultList'
-          description: All faults
+                $ref: '#/components/schemas/FaultListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6319,7 +7922,7 @@ paths:
       operationId: streamFaults
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6338,8 +7941,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Function list
+                $ref: '#/components/schemas/FunctionList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6366,8 +7969,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityDetail'
-          description: Entity details with capabilities
+                $ref: '#/components/schemas/FunctionDetail'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6394,7 +7997,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6427,7 +8030,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BulkDataDescriptorList'
-          description: Descriptor list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6467,7 +8070,7 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File content
+          description: Binary download
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6490,13 +8093,13 @@ paths:
           type: string
       responses:
         '204':
-          description: All configurations deleted
+          description: No content
         '207':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationDeleteMultiStatus'
-          description: Partial success - some nodes failed
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6521,8 +8124,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConfigurationMetaDataList'
-          description: Configuration list
+                $ref: '#/components/schemas/ConfigurationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6551,7 +8154,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Configuration deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6583,7 +8186,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Configuration parameter
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6613,8 +8216,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ConfigurationWriteValue'
-        description: Configuration value
+              $ref: '#/components/schemas/ConfigurationWriteRequest'
+        description: ''
         required: true
       responses:
         '200':
@@ -6622,7 +8225,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigurationReadValue'
-          description: Updated configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6649,7 +8252,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscriptionList'
-          description: Subscription list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6674,9 +8277,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CyclicSubscriptionCreateRequest'
-        description: Subscription configuration
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CyclicSubscription'
+          description: ''
         '201':
           content:
             application/json:
@@ -6711,7 +8320,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Subscription deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6743,7 +8352,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscription'
-          description: Subscription details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6773,8 +8382,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CyclicSubscription'
-        description: Subscription update
+              $ref: '#/components/schemas/CyclicSubscriptionUpdateRequest'
+        description: ''
         required: true
       responses:
         '200':
@@ -6782,7 +8391,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CyclicSubscription'
-          description: Updated subscription
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6811,7 +8420,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6837,8 +8446,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataItemList'
-          description: Data item list
+                $ref: '#/components/schemas/DataListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6864,8 +8473,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkDataCategoryList'
-          description: Category list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6891,15 +8500,8 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  items:
-                    items:
-                      type: object
-                    type: array
-                required:
-                - items
-                type: object
-          description: Group list
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6931,8 +8533,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Data value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6970,8 +8572,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Written value
+                $ref: '#/components/schemas/DataValue'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -6994,7 +8596,7 @@ paths:
           type: string
       responses:
         '204':
-          description: All faults cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7019,8 +8621,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultList'
-          description: Fault list
+                $ref: '#/components/schemas/FaultListResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7048,8 +8650,14 @@ paths:
         schema:
           type: string
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaultClearResult'
+          description: ''
         '204':
-          description: Fault cleared
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7081,8 +8689,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultDetail'
-          description: Fault detail
+                $ref: '#/components/schemas/FaultDetailResult'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7108,8 +8716,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntityList'
-          description: Host list
+                $ref: '#/components/schemas/AppList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7136,7 +8744,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogEntryList'
-          description: Log entries
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7163,7 +8771,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogConfiguration'
-          description: Log configuration
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7188,11 +8796,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LogConfiguration'
-        description: Log configuration
+        description: ''
         required: true
       responses:
         '204':
-          description: Configuration updated
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7218,8 +8826,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationItemList'
-          description: Operation list
+                $ref: '#/components/schemas/OperationList'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7253,7 +8861,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationDetail'
-          description: Operation details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7286,7 +8894,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecutionList'
-          description: Execution list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7317,22 +8925,22 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-        description: Operation parameters
+              $ref: '#/components/schemas/ExecutionCreateRequest'
+        description: ''
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-          description: Synchronous result
+                $ref: '#/components/schemas/OperationExecutionResult'
+          description: ''
         '202':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationExecution'
-          description: Asynchronous execution started
+                $ref: '#/components/schemas/ExecutionCreateAsync'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7367,7 +8975,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Execution cancelled
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7405,7 +9013,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Execution status
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7442,7 +9050,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExecutionUpdateRequest'
-        description: Execution control
+        description: ''
         required: true
       responses:
         '200':
@@ -7450,7 +9058,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationExecution'
-          description: Updated execution
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationExecution'
+          description: Accepted (asynchronous control)
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7477,7 +9091,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TriggerList'
-          description: Trigger list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7502,9 +9116,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerCreateRequest'
-        description: Trigger configuration
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trigger'
+          description: ''
         '201':
           content:
             application/json:
@@ -7539,7 +9159,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Trigger deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7571,7 +9191,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Trigger details
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7602,7 +9222,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TriggerUpdateRequest'
-        description: Trigger update
+        description: ''
         required: true
       responses:
         '200':
@@ -7610,7 +9230,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-          description: Updated trigger
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7639,7 +9259,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Successful response
+          description: Server-Sent Events stream
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7659,7 +9279,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HealthStatus'
-          description: Gateway is healthy
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7679,7 +9299,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateList'
-          description: Update list
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7696,15 +9316,21 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-        description: Update descriptor
+              $ref: '#/components/schemas/UpdateRegisterRequest'
+        description: ''
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateRegisterResponse'
+          description: ''
         '201':
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/UpdateRegisterResponse'
           description: Update registered
         '400':
           $ref: '#/components/responses/GenericError'
@@ -7728,7 +9354,7 @@ paths:
           type: string
       responses:
         '204':
-          description: Update deleted
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7753,8 +9379,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-          description: Update details
+                $ref: '#/components/schemas/UpdateDetail'
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7775,16 +9401,11 @@ paths:
         required: true
         schema:
           type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-        description: Automated parameters
-        required: true
       responses:
         '202':
           description: Automated update started
+        '204':
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7805,16 +9426,11 @@ paths:
         required: true
         schema:
           type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-        description: Execute parameters
-        required: true
       responses:
         '202':
           description: Update execution started
+        '204':
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7835,16 +9451,11 @@ paths:
         required: true
         schema:
           type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-        description: Prepare parameters
-        required: true
       responses:
         '202':
           description: Update preparation started
+        '204':
+          description: No content
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7871,7 +9482,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateStatus'
-          description: Update status
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':
@@ -7891,7 +9502,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VersionInfo'
-          description: Version info
+          description: ''
         '400':
           $ref: '#/components/responses/GenericError'
         '404':

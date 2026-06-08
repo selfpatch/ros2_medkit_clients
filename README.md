@@ -14,7 +14,7 @@ OpenAPI-generated client libraries for the [ros2_medkit gateway](https://github.
 
 ## Spec Version
 
-Current spec is from gateway **v0.4.0** - see `SPEC_VERSION` for exact version.
+Current spec is from gateway **v0.5.0** - see `SPEC_VERSION` for exact version.
 
 ## Usage
 

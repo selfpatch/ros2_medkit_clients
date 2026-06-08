@@ -1,6 +1,6 @@
 {
   "name": "@selfpatch/ros2-medkit-client-ts",
-  "version": "0.1.1",
+  "version": "0.5.0",
   "description": "Type-safe TypeScript client for the ros2_medkit gateway",
   "type": "module",
   "main": "./dist/index.js",
