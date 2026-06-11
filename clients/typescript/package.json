@@ -19,7 +19,7 @@
     "lint": "eslint src/ test/",
     "typecheck": "tsc --noEmit",
     "generate": "mkdir -p generated && openapi-typescript ../../spec/openapi.yaml -o generated/schema.d.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run generate && npm run build"
   },
   "peerDependencies": {
     "openapi-fetch": "^0.17.0"
