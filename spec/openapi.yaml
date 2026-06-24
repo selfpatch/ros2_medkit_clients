@@ -72,6 +72,8 @@ components:
           anyOf:
           - type: string
           - type: 'null'
+        status:
+          type: string
         tags:
           anyOf:
           - items:
@@ -99,6 +101,7 @@ components:
       - id
       - name
       - type
+      - status
       - data
       - operations
       - configurations
@@ -442,6 +445,8 @@ components:
           anyOf:
           - type: string
           - type: 'null'
+        status:
+          type: string
         subcomponents:
           type: string
         tags:
@@ -467,6 +472,7 @@ components:
       - id
       - name
       - type
+      - status
       - data
       - operations
       - configurations
@@ -1442,6 +1448,36 @@ components:
       - status
       - timestamp
       type: object
+    LifecycleStatusResponse:
+      properties:
+        force-restart:
+          anyOf:
+          - type: string
+          - type: 'null'
+        force-shutdown:
+          anyOf:
+          - type: string
+          - type: 'null'
+        restart:
+          anyOf:
+          - type: string
+          - type: 'null'
+        shutdown:
+          anyOf:
+          - type: string
+          - type: 'null'
+        start:
+          anyOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - ready
+          - notReady
+          type: string
+      required:
+      - status
+      type: object
     Lock:
       properties:
         id:
@@ -2410,7 +2446,7 @@ info:
   description: SOVD-compatible REST API for ROS 2 diagnostics and control. See https://selfpatch.github.io/ros2_medkit/
     for documentation.
   title: ROS 2 Medkit Gateway
-  version: 0.5.0
+  version: 0.6.0
   x-sovd-version: 1.0.0
 openapi: 3.1.0
 paths:
@@ -3246,6 +3282,19 @@ paths:
       description: Returns all active faults reported by this app.
       operationId: listAppFaults
       parameters:
+      - description: 'Filter by fault status: pending, confirmed, cleared, healed,
+          or all'
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - pending
+          - confirmed
+          - cleared
+          - healed
+          - all
+          type: string
       - description: The app identifier
         in: path
         name: app_id
@@ -3572,6 +3621,25 @@ paths:
       description: Queries application log entries for this app.
       operationId: listAppLogs
       parameters:
+      - description: 'Filter by minimum severity: debug, info, warning, error, or
+          fatal'
+        in: query
+        name: severity
+        required: false
+        schema:
+          enum:
+          - debug
+          - info
+          - warning
+          - error
+          - fatal
+          type: string
+      - description: Filter by logger context substring (max 256 chars)
+        in: query
+        name: context
+        required: false
+        schema:
+          type: string
       - description: The app identifier
         in: path
         name: app_id
@@ -4206,6 +4274,152 @@ paths:
       summary: Terminate script execution for app
       tags:
       - Scripts
+  /apps/{app_id}/status:
+    get:
+      operationId: getAppsStatus
+      parameters:
+      - description: The app identifier
+        in: path
+        name: app_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecycleStatusResponse'
+          description: ''
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Get app lifecycle status
+      tags:
+      - Lifecycle
+  /apps/{app_id}/status/force-restart:
+    put:
+      operationId: putAppsStatusForceRestart
+      parameters:
+      - description: The app identifier
+        in: path
+        name: app_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'force-restart'
+      tags:
+      - Lifecycle
+  /apps/{app_id}/status/force-shutdown:
+    put:
+      operationId: putAppsStatusForceShutdown
+      parameters:
+      - description: The app identifier
+        in: path
+        name: app_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'force-shutdown'
+      tags:
+      - Lifecycle
+  /apps/{app_id}/status/restart:
+    put:
+      operationId: putAppsStatusRestart
+      parameters:
+      - description: The app identifier
+        in: path
+        name: app_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'restart'
+      tags:
+      - Lifecycle
+  /apps/{app_id}/status/shutdown:
+    put:
+      operationId: putAppsStatusShutdown
+      parameters:
+      - description: The app identifier
+        in: path
+        name: app_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'shutdown'
+      tags:
+      - Lifecycle
+  /apps/{app_id}/status/start:
+    put:
+      operationId: putAppsStatusStart
+      parameters:
+      - description: The app identifier
+        in: path
+        name: app_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'start'
+      tags:
+      - Lifecycle
   /apps/{app_id}/triggers:
     get:
       description: Lists all triggers configured for this app.
@@ -4938,6 +5152,19 @@ paths:
       description: Returns all active faults reported by this area.
       operationId: listAreaFaults
       parameters:
+      - description: 'Filter by fault status: pending, confirmed, cleared, healed,
+          or all'
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - pending
+          - confirmed
+          - cleared
+          - healed
+          - all
+          type: string
       - description: The area identifier
         in: path
         name: area_id
@@ -5033,6 +5260,25 @@ paths:
       description: Queries application log entries for this area.
       operationId: listAreaLogs
       parameters:
+      - description: 'Filter by minimum severity: debug, info, warning, error, or
+          fatal'
+        in: query
+        name: severity
+        required: false
+        schema:
+          enum:
+          - debug
+          - info
+          - warning
+          - error
+          - fatal
+          type: string
+      - description: Filter by logger context substring (max 256 chars)
+        in: query
+        name: context
+        required: false
+        schema:
+          type: string
       - description: The area identifier
         in: path
         name: area_id
@@ -6581,6 +6827,19 @@ paths:
       description: Returns all active faults reported by this component.
       operationId: listComponentFaults
       parameters:
+      - description: 'Filter by fault status: pending, confirmed, cleared, healed,
+          or all'
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - pending
+          - confirmed
+          - cleared
+          - healed
+          - all
+          type: string
       - description: The component identifier
         in: path
         name: component_id
@@ -6907,6 +7166,25 @@ paths:
       description: Queries application log entries for this component.
       operationId: listComponentLogs
       parameters:
+      - description: 'Filter by minimum severity: debug, info, warning, error, or
+          fatal'
+        in: query
+        name: severity
+        required: false
+        schema:
+          enum:
+          - debug
+          - info
+          - warning
+          - error
+          - fatal
+          type: string
+      - description: Filter by logger context substring (max 256 chars)
+        in: query
+        name: context
+        required: false
+        schema:
+          type: string
       - description: The component identifier
         in: path
         name: component_id
@@ -7541,6 +7819,152 @@ paths:
       summary: Terminate script execution for component
       tags:
       - Scripts
+  /components/{component_id}/status:
+    get:
+      operationId: getComponentsStatus
+      parameters:
+      - description: The component identifier
+        in: path
+        name: component_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecycleStatusResponse'
+          description: ''
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Get component lifecycle status
+      tags:
+      - Lifecycle
+  /components/{component_id}/status/force-restart:
+    put:
+      operationId: putComponentsStatusForceRestart
+      parameters:
+      - description: The component identifier
+        in: path
+        name: component_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'force-restart'
+      tags:
+      - Lifecycle
+  /components/{component_id}/status/force-shutdown:
+    put:
+      operationId: putComponentsStatusForceShutdown
+      parameters:
+      - description: The component identifier
+        in: path
+        name: component_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'force-shutdown'
+      tags:
+      - Lifecycle
+  /components/{component_id}/status/restart:
+    put:
+      operationId: putComponentsStatusRestart
+      parameters:
+      - description: The component identifier
+        in: path
+        name: component_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'restart'
+      tags:
+      - Lifecycle
+  /components/{component_id}/status/shutdown:
+    put:
+      operationId: putComponentsStatusShutdown
+      parameters:
+      - description: The component identifier
+        in: path
+        name: component_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'shutdown'
+      tags:
+      - Lifecycle
+  /components/{component_id}/status/start:
+    put:
+      operationId: putComponentsStatusStart
+      parameters:
+      - description: The component identifier
+        in: path
+        name: component_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Lifecycle transition accepted
+        '204':
+          description: No content
+        '400':
+          $ref: '#/components/responses/GenericError'
+        '404':
+          $ref: '#/components/responses/GenericError'
+        '500':
+          $ref: '#/components/responses/GenericError'
+      summary: Request lifecycle transition 'start'
+      tags:
+      - Lifecycle
   /components/{component_id}/subcomponents:
     get:
       description: Lists subcomponents of this component.
@@ -7885,6 +8309,20 @@ paths:
     delete:
       description: Clears all faults across the entire system.
       operationId: clearAllFaults
+      parameters:
+      - description: 'Clear only faults in this status: pending, confirmed, cleared,
+          healed, or all'
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - pending
+          - confirmed
+          - cleared
+          - healed
+          - all
+          type: string
       responses:
         '204':
           description: No content
@@ -7900,6 +8338,32 @@ paths:
     get:
       description: Retrieve all faults across the system.
       operationId: listAllFaults
+      parameters:
+      - description: 'Filter by fault status: pending, confirmed, cleared, healed,
+          or all'
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - pending
+          - confirmed
+          - cleared
+          - healed
+          - all
+          type: string
+      - description: Include muted faults in the response
+        in: query
+        name: include_muted
+        required: false
+        schema:
+          type: boolean
+      - description: Include fault clusters in the response
+        in: query
+        name: include_clusters
+        required: false
+        schema:
+          type: boolean
       responses:
         '200':
           content:
@@ -8610,6 +9074,19 @@ paths:
       description: Returns all active faults reported by this function.
       operationId: listFunctionFaults
       parameters:
+      - description: 'Filter by fault status: pending, confirmed, cleared, healed,
+          or all'
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - pending
+          - confirmed
+          - cleared
+          - healed
+          - all
+          type: string
       - description: The function identifier
         in: path
         name: function_id
@@ -8732,6 +9209,25 @@ paths:
       description: Queries application log entries for this function.
       operationId: listFunctionLogs
       parameters:
+      - description: 'Filter by minimum severity: debug, info, warning, error, or
+          fatal'
+        in: query
+        name: severity
+        required: false
+        schema:
+          enum:
+          - debug
+          - info
+          - warning
+          - error
+          - fatal
+          type: string
+      - description: Filter by logger context substring (max 256 chars)
+        in: query
+        name: context
+        required: false
+        schema:
+          type: string
       - description: The function identifier
         in: path
         name: function_id
@@ -9293,6 +9789,19 @@ paths:
     get:
       description: Lists all registered software updates.
       operationId: listUpdates
+      parameters:
+      - description: Filter by update origin identifier
+        in: query
+        name: origin
+        required: false
+        schema:
+          type: string
+      - description: Filter by target version
+        in: query
+        name: target-version
+        required: false
+        schema:
+          type: string
       responses:
         '200':
           content:
@@ -9514,7 +10023,7 @@ paths:
       - Server
 servers:
 - description: Gateway server
-  url: http://localhost:8080/api/v1
+  url: http://127.0.0.1:8080/api/v1
 tags:
 - description: Gateway health, metadata, and version info
   name: Server
@@ -9542,5 +10051,7 @@ tags:
   name: Scripts
 - description: Software update management
   name: Updates
+- description: Entity status and lifecycle control (start, restart, shutdown)
+  name: Lifecycle
 - description: JWT-based authentication
   name: Authentication

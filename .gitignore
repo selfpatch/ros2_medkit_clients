@@ -1,6 +1,7 @@
 # Generated client code
 clients/typescript/generated/
 clients/python/generated/
+clients/python/src/ros2_medkit_client/_generated
 
 # Node
 node_modules/
