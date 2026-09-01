@@ -4,6 +4,7 @@
 
 from ros2_medkit_client._generated.api.discovery import (
     get_app,
+    get_app_area,
     get_app_host,
     get_area,
     get_component,
@@ -24,6 +25,7 @@ from ros2_medkit_client._generated.api.discovery import (
 
 __all__ = [
     "get_app",
+    "get_app_area",
     "get_app_host",
     "get_area",
     "get_component",
