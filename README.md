@@ -14,7 +14,7 @@ OpenAPI-generated client libraries for the [ros2_medkit gateway](https://github.
 
 ## Spec Version
 
-Current spec is from gateway **v0.5.0** - see `SPEC_VERSION` for exact version.
+Current spec is from gateway **v0.7.0** - see `SPEC_VERSION` for exact version.
 
 ## Usage
 
@@ -80,8 +80,10 @@ See `clients/typescript/` for the full source and API.
 
 ### Setup
 
+The wheel is attached to a GitHub release, not published to a package index:
+
 ```bash
-pip install ros2-medkit-client --index-url https://pypi.pkg.github.com/selfpatch/simple/
+pip install https://github.com/selfpatch/ros2_medkit_clients/releases/download/py-v0.7.0/ros2_medkit_client-0.7.0-py3-none-any.whl
 ```
 
 ### Usage

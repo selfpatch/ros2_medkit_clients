@@ -55,5 +55,46 @@ pipx run openapi-python-client==0.28.3 generate \
 
 echo "Python client generated: $PY_GEN_DIR/"
 
+# An endpoint that accepts one schema under two content types gets a body typed
+# `Schema | Unset = UNSET`, but the emitted import line only brings in the UNSET
+# sentinel, not the Unset class the annotation names. Importing such a module
+# raises NameError before any request is made. `/auth/authorize` and
+# `/auth/token` are in that shape, because RFC 6749 requires a token endpoint to
+# accept application/x-www-form-urlencoded beside application/json.
+# openapi-python-client 0.29.1 is the newest release and still emits it; the
+# content_type_overrides setting collapses the duplicated union member but does
+# not add the import.
+python3 - "$PY_GEN_DIR" <<'PYFIX'
+import pathlib
+import re
+import sys
+
+gen_dir = pathlib.Path(sys.argv[1])
+uses_unset = re.compile(r"(?<![A-Za-z0-9_.])Unset(?![A-Za-z0-9_])")
+import_line = re.compile(r"^from (\.+)types import (.+)$", re.MULTILINE)
+patched = []
+
+for path in sorted(gen_dir.rglob("*.py")):
+    source = path.read_text()
+    match = import_line.search(source)
+    if not match:
+        continue
+    names = [n.strip() for n in match.group(2).split(",")]
+    if "Unset" in names:
+        continue
+    body = source[: match.start()] + source[match.end() :]
+    if not uses_unset.search(body):
+        continue
+    # Appended rather than re-sorted: the generator already writes the names in
+    # the order isort wants, and sorting them again moves UNSET behind Response.
+    names.append("Unset")
+    replacement = f"from {match.group(1)}types import {', '.join(names)}"
+    path.write_text(source[: match.start()] + replacement + source[match.end() :])
+    patched.append(path.relative_to(gen_dir))
+
+for path in patched:
+    print(f"Added the missing Unset import to {path}")
+PYFIX
+
 echo ""
 echo "=== Generation complete ==="
